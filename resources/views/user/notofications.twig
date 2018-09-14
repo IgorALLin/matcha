@@ -6,16 +6,16 @@
 
   <ul class="nav nav-tabs">
     <li class="nav-item">
-      <a v-bind:class="wached" href="#" @click="switchTabs">Who wached my profile</a>
+      <a v-bind:class="wached" href="javascript:void(0);" @click="switchTabs">Who wached my profile</a>
     </li>
     <li class="nav-item">
-      <a v-bind:class="browsing" href="#" @click="switchTabs">Browsing history</a>
+      <a v-bind:class="browsing" href="javascript:void(0);" @click="switchTabs">Browsing history</a>
     </li>
     <li class="nav-item">
-      <a v-bind:class="liked" href="#" @click="switchTabs">Who liked me</a>
+      <a v-bind:class="liked" href="javascript:void(0);" @click="switchTabs">Who liked me</a>
     </li>
     <li class="nav-item">
-      <a v-bind:class="likes" href="#" @click="switchTabs">My likes</a>
+      <a v-bind:class="likes" href="javascript:void(0);" @click="switchTabs">My likes</a>
     </li>
   </ul>
 
@@ -29,9 +29,4 @@
 
 </div>
 
-{% endblock %}
-
-{% block javascript %}
-    {{ parent() }}
-     <script src="{{base_url()}}/js/main.js"></script>
 {% endblock %}

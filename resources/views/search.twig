@@ -345,9 +345,3 @@
     {% endfor %} 
   
 {% endblock %}
-
-{% block javascript %}
-    {{ parent() }}
-    <script src="{{base_url()}}/public/js/geo.js"></script>
-    <script src="{{base_url()}}/public/js/multiple-select.js"></script>
-{% endblock %}
