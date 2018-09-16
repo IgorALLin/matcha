@@ -1,4 +1,17 @@
 $(document).ready(function() {
+	setInterval(function(){ 
+		$.ajax({
+			type: "POST",
+			url: baseUrl + "/public/user/live_note",
+			data: {
+				now: Math.floor(Date.now() * 0.001)
+			},
+			success: function(response){
+				console.log(response);
+			}
+		}); 
+	}, 3000);
+
 	$('#tags-select').multiselect({
 		nonSelectedText: 'Select tags',
 		buttonWidth: '100%',

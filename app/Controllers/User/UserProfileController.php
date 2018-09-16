@@ -23,6 +23,7 @@ class UserProfileController extends Controller{
 
 	public function postUserProfile($request, $response){
  		$photos = $this->photos->get($request);
+
 		$profile = array(
 			'photos' => $photos,
 			'gender' => $request->getParam('gender'),

@@ -12,6 +12,9 @@ class Photos {
 	public function get($request) {
 		$directory = $this->container->upload_directory;
 		$images = $request->getUploadedFiles();
+		if (!file_exists($directory)) {
+		    mkdir($directory, 0777, true);
+		}
 
 		if(count($images['picture']) > 5)
 			$images['picture'] = array_slice($images['picture'], 0, 5);

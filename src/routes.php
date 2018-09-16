@@ -40,6 +40,8 @@ $app->group('', function() {
 
 	$this->post('/user/notifications', 'NotificationController:post');
 
+	$this->post('/user/live_note', 'NotificationController:live');
+
 	$this->post('/user/like', 'LikesController:like')->setName('user.like');
 
 	$this->post('/user/save_tag', 'TagsController:save_tag');
