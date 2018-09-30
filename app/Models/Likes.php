@@ -45,13 +45,12 @@ class Likes{
 				FROM `likes`
 				RIGHT  JOIN `users` ON users.id = likes.liked_id
 				WHERE `like_id` = :like_id
-				ORDER BY likes.time 
-				DESC
-				LIMIT :start, :finish";
+				ORDER BY likes.time  DESC
+				LIMIT {$start},{$finish}";
 		$stmt = $this->container->db->prepare($sql);
 		$stmt->bindParam(':like_id', $like_id);
-		$stmt->bindParam(':start', $start, \PDO::PARAM_INT);
-		$stmt->bindParam(':finish', $finish, \PDO::PARAM_INT);
+		//$stmt->bindParam(':start', $start, \PDO::PARAM_INT);
+		//$stmt->bindParam(':finish', $finish, \PDO::PARAM_INT);
 		$stmt->execute();
 
 		return $stmt;
@@ -62,13 +61,12 @@ class Likes{
 			FROM `likes`
 			RIGHT  JOIN `users` ON users.id = likes.like_id 
 			WHERE `liked_id` = :liked_id
-			ORDER BY likes.time 
-			DESC
-			LIMIT :start, :finish";
+			ORDER BY likes.time DESC
+			LIMIT {$start},{$finish}";
 		$stmt = $this->container->db->prepare($sql);
 		$stmt->bindParam(':liked_id', $liked_id);
-		$stmt->bindParam(':start', $start, \PDO::PARAM_INT);
-		$stmt->bindParam(':finish', $finish, \PDO::PARAM_INT);
+		//$stmt->bindParam(':start', $start, \PDO::PARAM_INT);
+		//$stmt->bindParam(':finish', $finish, \PDO::PARAM_INT);
 		$stmt->execute();
 		
 		return $stmt;
