@@ -58,3 +58,7 @@ body {
 .container {
   background-color: white;
 }
+
+.hide {
+  display: none;
+}

@@ -10,7 +10,7 @@ $(document).ready(function() {
 	  		$(result).each(function(){
                 $("#show_tags ul").append('<li>' + '#' + this.tag + '</li>');
             })
-    		console.log(result);
+    		//console.log(result);
   		}
 	});
 });
@@ -37,7 +37,7 @@ $("#addTag").click(function(){
 			  		tag: tag,
 			  	},
 			  	success: function(result){
-		    		console.log(result);
+		    		//console.log(result);
 		  		}
 			});
 		}

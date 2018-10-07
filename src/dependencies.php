@@ -1,5 +1,4 @@
 <?php
-// DIC configuration
 
 $container = $app->getContainer();
 
@@ -38,6 +37,10 @@ $container['view'] = function ($container) {
 	return $view;
 };
 
+$container['people'] = function($container) {
+	return new \App\Config\People($container);
+};
+
 $container['user'] = function($container) {
 	return new \App\Models\User($container);
 };
@@ -64,6 +67,10 @@ $container['fame_rating'] = function($container) {
 
 $container['validator'] = function($container) {
 	return new \App\Validation\Validator($container);
+};
+
+$container['TestController'] = function($container) {
+	return new \App\Controllers\TestController($container);
 };
 
 $container['HomeController'] = function($container) {
@@ -133,3 +140,4 @@ $container['ShowProfileController'] = function($container) {
 $container['TagsController'] = function($container) {
 	return new \App\Controllers\User\TagsController($container);
 };
+

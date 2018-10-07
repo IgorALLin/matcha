@@ -6,6 +6,9 @@ use Slim\Http\Response;
 use App\Middleware\AuthControlMiddleware;
 use App\Middleware\GuestControlMiddleware;
 use App\Middleware\ActivityMiddleware;
+use App\Middleware\VisitNotificationMiddleware;
+
+$app->get('/test', 'TestController:index')->setName('test');
 
 $app->get('/', 'HomeController:index')->setName('home');
 
@@ -19,7 +22,7 @@ $app->group('', function() {
 	$this->get('/auth/email/confirm', 'ConfirmEmailController:getConfirm')->setName('auth.email.confirm');
 })->add(new GuestControlMiddleware($container));
 
-$app->group('', function() {
+$app->group('', function() use ($container) {
 	$this->get('/auth/signout', 'AuthController:getSignOut')->setName('auth.signout');
 
 	$this->get('/auth/password/change', 'PasswordController:getChangePassword')->setName('auth.password.change');
@@ -31,7 +34,8 @@ $app->group('', function() {
 	$this->get('/search', 'SearchController:search')->setName('search');
 	$this->post('/search', 'SearchController:filters');
 
-	$this->get('/show', 'ShowProfileController:show')->setName('showProfile');
+	$this->get('/show', 'ShowProfileController:show')->setName('showProfile')
+													 ->add(new VisitNotificationMiddleware($container));
 
 	//$this->post('/getCountry', 'GeoController::getCountry')->setName('getCountry');
 	$this->post('/getCountry', 'GeoController:getCountry')->setName('getCountry');

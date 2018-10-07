@@ -14,28 +14,6 @@ class NotificationController extends Controller{
 				]);
 	}
 
-	public function live($request, $response) {
-		$now = $request->getParsedBody();
-		$now = $now['now'];
-		echo $now.'/';
-		//echo date('Y/m/d H:i:s', $now).'////';
-		//echo date('Y/m/d H:i:s', time()).'|||||||';
-		echo time().'|||||||';
-
-		$data = $this->visits->getByVisitedId($_SESSION['user'], 0, 15);
-		if($data->rowCount()) {
-			$data = $data->fetchAll();
-			foreach($data as $key => $row){
-				//echo $now - strtotime($row['time']).',';
-				echo strtotime($row['time']).'/';
-				if(($now - strtotime($row['time'])) < 0){
-					echo $row['time'].'/';
-				}
-			}
-		}
-		exit();
-	}
-
 	public function post($request, $response){
 		$post = $request->getParsedBody();
 		$response = 'reachedMax';

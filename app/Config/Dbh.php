@@ -45,6 +45,7 @@ class Dbh{
 				`lastName` VARCHAR(255) NOT NULL,
 				`token` VARCHAR(128) NOT NULL DEFAULT '0',
 				`verified` VARCHAR(1) NOT NULL DEFAULT 'N',
+				`is_prefilled` int (1) DEFAULT 0,
 				`lastActivity` TIMESTAMP
 	      		)",
 
@@ -60,7 +61,22 @@ class Dbh{
 				`sity` TEXT,
 				`dateOfBirth` DATE,
 				`user_id` INT(11) NOT NULL,
+				`language` VARCHAR(255),
 				FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+	      	)",
+
+
+	      	"user_position" => "CREATE TABLE IF NOT EXISTS `user_position` (
+				`id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+				`lat` DECIMAL(10, 7),
+				`lng` DECIMAL(10, 7),
+				`user_id` INT(11) NOT NULL,
+				`country` VARCHAR(255),
+				`country_code` VARCHAR(255),
+				`state` VARCHAR(255),
+				`city` VARCHAR(255),
+				`autoset` int(1) DEFAULT 1,
+				`manualset` int(1) DEFAULT 0
 	      	)",
 
 			"countries" => "CREATE TABLE IF NOT EXISTS `countries` (
@@ -112,10 +128,8 @@ class Dbh{
 			)",
 				
 			"users_tags" => "CREATE TABLE IF NOT EXISTS `users_tags` (
-				`id` int(11) NOT NULL AUTO_INCREMENT,
 				`tag_id` int(11) NOT NULL,
 				`user_id` int(11) NOT NULL,
-				PRIMARY KEY (`id`),
 				FOREIGN KEY (tag_id) REFERENCES tags(id) ON DELETE CASCADE,
 				FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 			)",
@@ -137,7 +151,7 @@ class Dbh{
 			}
 		}
 
-		//$container->geo->insertStates($this->connection);
+		$container->people->insertPeoples($this->connection);
 
 		if (!$errors)
 			return $this->connection;
