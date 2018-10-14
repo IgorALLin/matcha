@@ -25,7 +25,7 @@ class UserProfile{
 					TIMESTAMPDIFF(YEAR, user_profile.dateOfBirth, CURDATE()) AS age,
 					IF(TIMESTAMPDIFF(MINUTE, users.lastActivity, NOW()) > 15, users.lastActivity, 'ONLINE') as status
 					FROM `user_profile`
-					INNER JOIN `users` ON user_profile.user_id= users.id
+					INNER JOIN `users` ON user_profile.user_id = users.id
 					WHERE user_profile.id = :id";
 		$stmt = $this->db->prepare($sql);
 		$stmt->execute(array(':id' => $id));

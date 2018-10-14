@@ -62,3 +62,15 @@ body {
 .hide {
   display: none;
 }
+
+.not_viewed, .delete_notification, #delete_all_notifications,  #delete_all_visits{
+  cursor: pointer;
+}
+
+.viewed {
+  cursor: not-allowed;
+}
+
+.delete_notification, #delete_all_notifications,  #delete_all_visits{
+  color:red;
+}

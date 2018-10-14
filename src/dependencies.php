@@ -37,6 +37,14 @@ $container['view'] = function ($container) {
 	return $view;
 };
 
+$container['chats'] = function($container) {
+	return new \App\Models\chats($container);
+};
+
+$container['notification'] = function($container) {
+	return new \App\Models\Notification($container);
+};
+
 $container['people'] = function($container) {
 	return new \App\Config\People($container);
 };
@@ -67,6 +75,14 @@ $container['fame_rating'] = function($container) {
 
 $container['validator'] = function($container) {
 	return new \App\Validation\Validator($container);
+};
+
+$container['ChatsController'] = function($container) {
+	return new \App\Controllers\User\ChatsController($container);
+};
+
+$container['BrowsingHistoryController'] = function($container) {
+	return new \App\Controllers\User\BrowsingHistoryController($container);
 };
 
 $container['TestController'] = function($container) {

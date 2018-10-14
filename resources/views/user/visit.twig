@@ -1,0 +1,16 @@
+{% extends 'templates/app.twig' %}
+
+{% block content %}
+
+<div id="visits">
+    {% if visits %}
+        <p id="delete_all_visits">Clear history</p>
+        {% for key,value in visits %}
+        <p>
+            You wached <a href="{{ base_url() }}/show?profile={{value['visited_id']}}">{{value['firstName']}} {{value['lastName']}} </a>profile {{value['time']}}
+        </p>
+        {% endfor %}
+    {% endif %}
+</div>
+
+{% endblock %}

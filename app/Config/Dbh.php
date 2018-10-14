@@ -136,10 +136,49 @@ class Dbh{
 
 			"fame_rating" => "CREATE TABLE IF NOT EXISTS `fame_rating` (
 				`id` int(11) NOT NULL AUTO_INCREMENT,
-				`rating` int(11) NOT NULL NOT NULL DEFAULT '1',
+				`rating` int(11) NOT NULL DEFAULT '1',
 				`user_id` int(11) NOT NULL,
 				PRIMARY KEY (`id`),
 				FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+			)",
+
+			"notification_types" => "CREATE TABLE IF NOT EXISTS `notification_types` (
+				`id` int(11) NOT NULL AUTO_INCREMENT,
+				`text` VARCHAR(255),
+				PRIMARY KEY (`id`)
+			)",
+
+			"notifications" => "CREATE TABLE IF NOT EXISTS `notifications` (
+				`id` int(11) NOT NULL AUTO_INCREMENT,
+				`user_id` int(11) NOT NULL,
+				`user1_id` int(11) NOT NULL,
+				`type` int(11) NOT NULL,
+				`viewed` BIT DEFAULT 0,
+				`time` TIMESTAMP,
+				PRIMARY KEY (`id`),
+				FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+				FOREIGN KEY (user1_id) REFERENCES users(id) ON DELETE CASCADE,
+				FOREIGN KEY (type) REFERENCES notification_types(id) ON DELETE CASCADE
+			)",
+
+			"chats" => "CREATE TABLE IF NOT EXISTS `chats` (
+				`id` int(11) NOT NULL AUTO_INCREMENT,
+				`user_id` int(11) NOT NULL,
+				`user1_id` int(11) NOT NULL,
+				`active` BIT DEFAULT 1,
+				`last_message` TIMESTAMP,
+				PRIMARY KEY (`id`),
+				FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+				FOREIGN KEY (user1_id) REFERENCES users(id) ON DELETE CASCADE
+			)",
+
+			"messages" => "CREATE TABLE IF NOT EXISTS `messages` (
+				`chat_id` int(11) NOT NULL,
+				`sender_id` int(11) NOT NULL,
+				`text` varchar(8000),
+				`time` TIMESTAMP,
+				FOREIGN KEY (sender_id) REFERENCES users(id) ON DELETE CASCADE,
+				FOREIGN KEY (chat_id) REFERENCES chats(id) ON DELETE CASCADE
 			)",
 		];
 
@@ -152,6 +191,10 @@ class Dbh{
 		}
 
 		$container->people->insertPeoples($this->connection);
+
+		//insert notification_types if not exist
+		$insert_n_types = new Fill_notification_types($this->connection);
+		$insert_n_types->fill();
 
 		if (!$errors)
 			return $this->connection;

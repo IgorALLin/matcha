@@ -34,17 +34,22 @@ $app->group('', function() use ($container) {
 	$this->get('/search', 'SearchController:search')->setName('search');
 	$this->post('/search', 'SearchController:filters');
 
-	$this->get('/show', 'ShowProfileController:show')->setName('showProfile')
-													 ->add(new VisitNotificationMiddleware($container));
+	$this->get('/show', 'ShowProfileController:show')->setName('showProfile');
 
 	//$this->post('/getCountry', 'GeoController::getCountry')->setName('getCountry');
 	$this->post('/getCountry', 'GeoController:getCountry')->setName('getCountry');
 
 	$this->get('/user/notifications', 'NotificationController:notifications')->setName('user.notifications');
+	$this->post('/user/notifications/viewed', 'NotificationController:viewed');
+	$this->post('/user/notifications/delete', 'NotificationController:delete');
+	$this->post('/user/notifications/count', 'NotificationController:count');
 
-	$this->post('/user/notifications', 'NotificationController:post');
+	//$this->post('/user/notifications', 'NotificationController:post');
 
-	$this->post('/user/live_note', 'NotificationController:live');
+	$this->get('/user/browsing_history', 'BrowsingHistoryController:index')->setName('user.browsing_history');
+	$this->get('/user/browsing_history/clear_history', 'BrowsingHistoryController:delete')->setName('user.browsing_history.delete');
+
+	$this->get('/chats', 'ChatsController:index')->setName('chats');
 
 	$this->post('/user/like', 'LikesController:like')->setName('user.like');
 

@@ -3,92 +3,20 @@
 {% block content %}
 
 <div id="notification">
-  <ul class="nav nav-tabs">
-    <li class="nav-item" data-id="guests">
-      <a class="nav-link active" href="javascript:void(0);">Who wached my profile</a>
-    </li>
-    <li class="nav-item" data-id="visits">
-      <a class="nav-link" href="javascript:void(0);">Browsing history</a>
-    </li>
-    <li class="nav-item" data-id="who_liked_me">
-      <a class="nav-link" href="javascript:void(0);">Who liked me</a>
-    </li>
-    <li class="nav-item" data-id="my_likes">
-      <a class="nav-link" href="javascript:void(0);">My likes</a>
-    </li>
-  </ul>
-
-  <form action="{{ path_for('user.notifications') }}" method="post">
-    <input class="btn btn-lg btn-primary btn-block" value="Delete" type="submit">
-    <table class="table table-borderless hide" id="visits">
-      <tbody>
-        {% for key,value in visits %}
-					<tr>
-				    <td>
-				      <div class="form-check">
-				        <input type="checkbox" class="form-check-input" name="visits{{key}}" value="{{value['id']}}">
-				      </div>
-				    </td>
-				    <td>
-							You wached <a href="{{ base_url() }}/show?profile={{value['visited_id']}}">{{value['firstName']}} {{value['lastName']}} </a>profile {{value['time']}}
-				    </td>
-				  </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-
-    <table class="table table-borderless hide" id="guests">
-      <tbody>
-        {% for key,value in guests %}
-          <tr>
-            <td>
-              <div class="form-check">
-                <input type="checkbox" class="form-check-input" name="guests{{key}}" value="{{value['id']}}">
-              </div>
-            </td>
-            <td>
-              <a href="{{ base_url() }}/show?profile={{value['visitor_id']}}">{{value['firstName']}} {{value['lastName']}}</a> wached youre profile at {{value['time']}}
-            </td>
-          </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-
-    <table class="table table-borderless hide" id="who_liked_me">
-      <tbody>
-        {% for key,value in liked %}
-          <tr>
-            <td>
-              <div class="form-check">
-                <input type="checkbox" class="form-check-input" name="liked{{key}}" value="{{value['id']}}">
-              </div>
-            </td>
-            <td>
-              <a href="{{ base_url() }}/show?profile={{value['like_id']}}">{{value['firstName']}} {{value['lastName']}}</a> liked you {{value['time']}}
-            </td>
-          </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-
-    <table class="table table-borderless hide" id="my_likes">
-      <tbody>
-        {% for key,value in likes %}
-          <tr>
-            <td>
-              <div class="form-check">
-                <input type="checkbox" class="form-check-input" name="likes{{key}}" value="{{value['id']}}">
-              </div>
-            </td>
-            <td>
-              You liked <a href="{{ base_url() }}/show?profile={{value['liked_id']}}">{{value['first_name']}} {{value['last_name']}}</a> {{value['time']}}
-            </td>
-          </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-  </form>
-
+  {% if notifications %}
+    <p id="delete_all_notifications">Delete all</p>
+    {% for key,value in notifications %}
+      <p data-id="{{value['id']}}">
+        {% if value['viewed'] %}
+          <span class="viewed">
+        {% else %}
+          <span class="not_viewed">
+        {% endif %}
+        Mark as viewed</span> <a href="{{ base_url() }}/show?profile={{value['uid']}}">{{value['firstName']}} {{value['lastName']}} </a>{{value['text']}} {{value['time']}} 
+        <span class="delete_notification">Delete</span>
+      </p>
+    {% endfor %}
+  {% endif %}
 </div>
 
 {% endblock %}

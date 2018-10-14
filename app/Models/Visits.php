@@ -52,6 +52,12 @@ class Visits{
 		
 		return $stmt;
 	}
+
+	public function clear_history() {
+		$sql = "DELETE FROM `visits`";
+		$stmt = $this->db->prepare($sql);
+		$stmt->execute();
+	}
 }
 
 ?>

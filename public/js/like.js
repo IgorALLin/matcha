@@ -19,10 +19,18 @@ var getUrl = window.location;
 var baseUrl = getUrl.protocol + "//" + getUrl.host + "/" + getUrl.pathname.split('/')[1];
 
 $('#like').on("click",function(){
-    if ($(this).text() == 'like')
+    if ($(this).attr('data-type') == 'like'){
         $(this).text('dislike');
-    else
+        $(this).attr('data-type', 'dislike');
+    }
+        
+    else{
         $(this).text('like');
+        $(this).attr('data-type', 'like');
+    }
     
-    $.post(baseUrl + '/public/user/like', {profile: profile});
-})
+    $.post(baseUrl + '/public/user/like', {
+        profile: profile,
+        type: $(this).attr('data-type')
+    });
+})()

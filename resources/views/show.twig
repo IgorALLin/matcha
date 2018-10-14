@@ -41,13 +41,7 @@
     <p>{{ profile.gender }}</p>
     <p>Fame rating: {{fame_rating}}</p>
     <p><strong>Seeking: </strong></p>
-    <a href="javascript:void(0)" id="like">
-        {% if like  %}
-            dislike
-        {% else %}
-            like   
-        {% endif %}
-    </a>
+    <a href="javascript:void(0)" id="like" data-type="{{like}}">{{like}}</a>
     <h5>Member Overview</h5>
     <p>{{ user_profile.biography }}</p>
     <h5>Interests</h5>

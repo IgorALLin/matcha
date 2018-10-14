@@ -3,6 +3,7 @@
 use App\Middleware\AuthControlMiddleware;
 use App\Middleware\GuestControlMiddleware;
 use App\Middleware\ActivityMiddleware;
+use App\Middleware\VisitNotificationMiddleware;
 
 $app->get('/', 'HomeController:index')->setName('home');
 
@@ -28,7 +29,8 @@ $app->group('', function() {
 	$this->get('/search', 'SearchController:search')->setName('search');
 	$this->post('/search', 'SearchController:filters');
 
-	$this->get('/show', 'ShowProfileController:show')->setName('showProfile');
+	$this->get('/show', 'ShowProfileController:show')->setName('showProfile')
+													->add(new VisitNotificationMiddleware($container));
 
 	//$this->post('/getCountry', 'GeoController::getCountry')->setName('getCountry');
 	$this->post('/getCountry', 'GeoController:getCountry')->setName('getCountry');
