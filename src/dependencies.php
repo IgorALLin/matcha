@@ -37,6 +37,14 @@ $container['view'] = function ($container) {
 	return $view;
 };
 
+$container['search'] = function($container) {
+	return new \App\Models\Search($container->db);
+};
+
+$container['chat_messages'] = function($container) {
+	return new \App\Models\ChatMessages($container);
+};
+
 $container['chats'] = function($container) {
 	return new \App\Models\chats($container);
 };

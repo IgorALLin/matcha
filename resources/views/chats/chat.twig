@@ -1,0 +1,17 @@
+{% extends 'templates/app.twig' %}
+
+{% block content %}
+
+<div id="messages">
+    {% if messages %}
+        {% for key,value in messages %}
+            <p>{{value.text}}, {{value.time}}</p>
+        {% endfor %}
+    {% endif %}
+</div>
+<div id="input">
+    <p><textarea rows="10" cols="45" name="text" id="message"></textarea></p>
+    <p><input type="submit" value="Отправить" id="send_message"></p>
+</div>
+
+{% endblock %}

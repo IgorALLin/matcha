@@ -62,7 +62,7 @@ class Tag {
 	}
 
 	private function userHaveTag($tag_id, $user_id) {
-		$sql = "SELECT `id` FROM `users_tags`
+		$sql = "SELECT `user_id` FROM `users_tags`
 				WHERE `tag_id` = :tag_id
 				AND `user_id` = :user_id
 				LIMIT 1";
@@ -72,6 +72,33 @@ class Tag {
 		$stmt->execute();
 
 		return $stmt->fetchColumn();
+	}
+
+	private function findOrfan($id)
+	 {
+		$sql = "SELECT tag_id FROM `users_tags` WHERE tag_id = '$id'";
+		$stmt = $this->container->db->prepare($sql);
+		$stmt->execute();
+
+		return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+	}
+
+
+	public function del_tags($tag, $user_id) {
+		$tag_id = $this->getTagId(ltrim($tag, "#"));
+		$sql = "DELETE  
+				FROM `users_tags` WHERE tag_id = '$tag_id' AND user_id = '$user_id'";
+		$stmt = $this->container->db->prepare($sql);
+		$stmt->execute();
+		$orfan = $this->findOrfan($tag_id);
+		if(!$orfan)
+		{
+			$sql = "DELETE  
+				FROM `tags` WHERE id = '$tag_id'";
+			$stmt = $this->container->db->prepare($sql);
+			$stmt->execute();
+		}
+		return $orfan;
 	}
 }
 

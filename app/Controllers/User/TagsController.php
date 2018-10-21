@@ -8,7 +8,7 @@ class TagsController extends Controller{
 	public function save_tag($request, $response) {
 		$post = $request->getParsedBody();
 		$this->tag->save($post['tag'], $_SESSION['user']);
-		echo 'ok';
+
  		exit();
 	}
 

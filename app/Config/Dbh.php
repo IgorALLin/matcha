@@ -166,6 +166,8 @@ class Dbh{
 				`user_id` int(11) NOT NULL,
 				`user1_id` int(11) NOT NULL,
 				`active` BIT DEFAULT 1,
+				`chanel` VARCHAR(50),
+				`viewed` BIT DEFAULT 0,
 				`last_message` TIMESTAMP,
 				PRIMARY KEY (`id`),
 				FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,

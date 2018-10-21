@@ -46,6 +46,38 @@ class AuthController extends Controller{
 		$this->flash->addMessage('info', 'You have been signed up! Please confirm youre email');	
 		return $response->withRedirect($this->router->pathFor('home'));
 	}
+
+	public function postreinit($request, $response)
+	{
+
+		$params = $request->getParsedbody();
+		$name = htmlspecialchars(strip_tags($params['username']));
+		$mail = htmlspecialchars(strip_tags($params['email']));
+		$password = htmlspecialchars(strip_tags($params['newPassword']));
+
+		if(($name != "" || $mail != "" || $password != "") && (!preg_match('/^[a-z\d_]{2,20}$/i', $name) || (!filter_var($mail, FILTER_VALIDATE_EMAIL) || !preg_match('/^(?=.*\d)(?=.*[A-Za-z])[0-9A-Za-z!@#$%]{8,12}$/', $password))))
+		{
+			$this->flash->addMessage('info', "I don't even want to know, what did you enter to get this place");	
+			return $response->withRedirect($this->router->pathFor('auth.reinit'));
+		}
+
+		if($this->container->userProfile->checklogin_mail($name, $mail))
+		{
+			$this->sendEmail->reinit($name, $mail, $password);
+			$this->flash->addMessage('info', 'Check your email for restoring link');	
+			return $response->withRedirect($this->router->pathFor('home'));
+		}
+		else
+		{
+				
+			$this->flash->addMessage('info', 'You have entered a wrong data');	
+			return $response->withRedirect($this->router->pathFor('auth.reinit'));
+		}
+	}
+
+	public function isAuth($request, $response) {
+		return $response->withJson($this->container->auth->check());
+	}
 }
 
 ?>

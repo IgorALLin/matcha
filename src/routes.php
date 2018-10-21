@@ -11,15 +11,20 @@ use App\Middleware\VisitNotificationMiddleware;
 $app->get('/test', 'TestController:index')->setName('test');
 
 $app->get('/', 'HomeController:index')->setName('home');
+$app->get('/is_auth', 'AuthController:isAuth');
 
 $app->group('', function() {
 	$this->get('/auth/signup', 'AuthController:getSignUp')->setName('auth.signup');
 	$this->post('/auth/signup', 'AuthController:postSignUp');
 
 	$this->get('/auth/signin', 'AuthController:getSignIn')->setName('auth.signin');
+	$this->get('/auth/reinit', 'AuthController:reinit')->setName('auth.reinit');
 	$this->post('/auth/signin', 'AuthController:postSignIn');
+	$this->post('/auth/reinit', 'AuthController:postreinit');
 
 	$this->get('/auth/email/confirm', 'ConfirmEmailController:getConfirm')->setName('auth.email.confirm');
+	$this->get('/auth/password/restore', 'PasswordController:restorePass')->setName('auth.password.restore');
+	$this->post('/auth/password/restore', 'PasswordController:postrestorePassword')->setName('auth.password.restore');
 })->add(new GuestControlMiddleware($container));
 
 $app->group('', function() use ($container) {
@@ -30,11 +35,14 @@ $app->group('', function() use ($container) {
 
 	$this->get('/user/profile', 'UserProfileController:getUserProfile')->setName('user.profile');
 	$this->post('/user/profile', 'UserProfileController:postUserProfile');
+	$this->get('/user/blacklist', 'UserProfileController:blacklist')->setName('user.blacklist');
+	$this->post('/user/blacklist', 'UserProfileController:blacklistPost');
 
 	$this->get('/search', 'SearchController:search')->setName('search');
 	$this->post('/search', 'SearchController:filters');
 
 	$this->get('/show', 'ShowProfileController:show')->setName('showProfile');
+	$this->post('/show', 'ShowProfileController:postShow');
 
 	//$this->post('/getCountry', 'GeoController::getCountry')->setName('getCountry');
 	$this->post('/getCountry', 'GeoController:getCountry')->setName('getCountry');
@@ -50,6 +58,10 @@ $app->group('', function() use ($container) {
 	$this->get('/user/browsing_history/clear_history', 'BrowsingHistoryController:delete')->setName('user.browsing_history.delete');
 
 	$this->get('/chats', 'ChatsController:index')->setName('chats');
+	$this->get('/chats/chat/{chanel}', 'ChatsController:chat');
+	$this->get('/chats/get_chats', 'ChatsController:get_chats');
+	$this->post('/chats/send_message', 'ChatsController:send_message');
+	$this->post('/chats/count', 'ChatsController:count');
 
 	$this->post('/user/like', 'LikesController:like')->setName('user.like');
 

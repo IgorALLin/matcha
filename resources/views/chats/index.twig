@@ -6,7 +6,11 @@
     {% if chats %}
         {% for key,value in chats %}
         <p>
-            You wached <a href="{{ base_url() }}/show?profile={{value['visited_id']}}">{{value['firstName']}} {{value['lastName']}} </a>profile {{value['time']}}
+            {#Chat with <a href="{{ base_url() }}/show?profile={{value['visited_id']}}">{{value['firstName']}} {{value['lastName']}} </a>profile {{value['time']}}#}
+            <a href="{{path_for('showProfile')}}?profile={{value['id']}}">
+            	<img src="app/users_photos/{{value['mainPhoto']}}" width="50" height="50" alt="lorem">
+            </a>	
+            <a href="{{path_for('chats')}}/chat/{{value['chanel']}}">Link to chat</a>
         </p>
         {% endfor %}
     {% endif %}
