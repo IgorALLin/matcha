@@ -130,6 +130,16 @@ function initMap()
 
     }
 
+$(document).ready(function() {
+ enableSetAuto();
+});
+
+
+function enableSetAuto(){
+      document.getElementById("autoset_location").disabled = true;
+      setTimeout(function(){document.getElementById("autoset_location").disabled = false;},4000);
+  }
+
 // send coords which user has manually set.
 // Sending by using ajax requset and store coords values  in formdata. This coords must be saved into database
 /*if(document.getElementById('manset_location'))
@@ -211,7 +221,7 @@ if( manset_location )
 
 
 
-var manset_location = document.getElementById('autoset_location');
+var autoset_location = document.getElementById('autoset_location');
 
 if( autoset_location)
 {

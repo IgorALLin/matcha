@@ -4,7 +4,7 @@ namespace App\Config;
 
 Class Fill_notification_types {
     private $connection;
-    private $types = ['liked you', 'viewed youre page', 'liked you back', 'unliked you'];
+    private $types = ['liked you', 'viewed youre page', 'liked you back', 'unliked you', 'sent you a message'];
 
     public function __construct($connection) {
         $this->connection = $connection;

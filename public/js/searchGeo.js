@@ -1,3 +1,5 @@
+var getUrl = window.location;
+var baseUrl = getUrl.protocol + "//" + getUrl.host + "/" + getUrl.pathname.split('/')[1];
 var map, infoWindow, mark, pos, postofillForm;
 
 
@@ -23,7 +25,6 @@ function initMapSearch()
         if (xhr.readyState == 4)
         {
           positionfrombase = JSON.parse(xhr.responseText);
-          console.log(positionfrombase);
           document.getElementById('chosen_country').innerHTML = positionfrombase.country;
           document.getElementById('chosen_state').innerHTML = positionfrombase.state;
           document.getElementById('chosen_city').innerHTML = positionfrombase.city;
@@ -140,7 +141,7 @@ function initMapSearch()
                               'You must allow a geolocation to be located automatically. ' :
                               'Error: Your browser doesn\'t support geolocation.');
         infoWindow.open(map);
-       // sendCoords("", "");
+        //sendCoords("", "");
     }
 
 
@@ -159,6 +160,7 @@ if(submit_search)
   
 
   submit_search.onclick = function(e)
+  
   {
     e.preventDefault();
       var xhr_submit = new XMLHttpRequest;
@@ -170,11 +172,11 @@ if(submit_search)
             {
               if (xhr_submit.readyState == 4)
                 {
-                  document.getElementById('form_status').innerHTML = xhr_submit.responseText;
-                  document.getElementById('gallery_response').innerHTML = "";
-                  document.getElementById('gallery_location_response').innerHTML = "";
-                  document.getElementById('gallery_location_city_response').innerHTML = "";
-                  document.getElementById('gallery_location_state_response').innerHTML = "";
+                    document.getElementById('gallery_response').innerHTML = "";
+                    document.getElementById('gallery_location_response').innerHTML = "";
+                    document.getElementById('gallery_location_city_response').innerHTML = "";
+                    document.getElementById('gallery_location_state_response').innerHTML = "";
+                
                   i = 0;
                   perPage = 20;
                   render(i, perPage);
@@ -183,61 +185,58 @@ if(submit_search)
   }
 }
 
-  /*var submit_search = new Vue({
-    el: '#submit_search',
-    methods:
-    {
-      sendFormdata: function(event)
-      {
-            var xhr_submit = new XMLHttpRequest;
-              formdata = new FormData(document.forms.search_form);
-          formdata.append("method", "fuck");
-            xhr_submit.open('POST', baseUrl + '/search', true);
-            xhr_submit.send(formdata);
-            xhr_submit.onloadend = function()
-            {
-              if (xhr_submit.readyState == 4)
-                {
-                  document.getElementById('form_status').innerHTML = xhr_submit.responseText;
-                  document.getElementById('gallery_response').innerHTML = "";
-                  document.getElementById('gallery_location_response').innerHTML = "";
-                  document.getElementById('gallery_location_city_response').innerHTML = "";
-                  document.getElementById('gallery_location_state_response').innerHTML = "";
-                  i = 0;
-                  perPage = 20;
-                  render(i, perPage);
-                }
-            }   
-      }
-    } 
-  })
-}
-*/
-
-
-
-
-
 
 $(document).ready(function() {
   var win = $(window);
 
 
-
-
-
-
   win.scroll(function() {
     if ($(document).height() - win.height() == win.scrollTop())
     {
+       
         i = perPage;
         perPage += 16;
         render(i, perPage);
     } 
   });
 
+  enableSubmit();
+
+
+  $(function() {
+
+       $(window).scroll(function()
+        {
+
+           if($(this).scrollTop() != 0)
+            {
+
+                $('#toTop').fadeIn();
+           
+           } 
+           else
+            {
+
+                  $('#toTop').fadeOut();
+
+           }
+
+          });
+           
+           $('#toTop').click(function() {
+
+           $('body,html').animate({scrollTop:0},800);
+
+           });
+           
+      });
+
 });
 
+function enableSubmit(){
+      document.getElementById("submit_search").disabled = true;
+      setTimeout(function(){document.getElementById("submit_search").disabled = false;},3000);
+  }
 
 function render(i, pageCount)
 {
@@ -262,7 +261,13 @@ function render(i, pageCount)
               if (xhr_gal.readyState == 4)
                 {
                  gallery_array = JSON.parse(xhr_gal.responseText);
-                  console.log(gallery_array);
+
+                 console.log(gallery_array);
+                  if(gallery_array == "error")
+                  {
+                    alert("I don't even want to know what you entered to get this place, if you do this accidantelly, otherwise it means you trying to illegally sneak into system and do some bad things. In that case i wish you can't plug a flashdrive in roght position at first attempt till the end of your days... ");
+                    return ;
+                  }
                   var len = Object.keys(gallery_array).length;
 
     
@@ -315,6 +320,14 @@ function render(i, pageCount)
                     block_age.setAttribute("class", "tag is-rounded");
                     block_age.innerHTML = "Age: " + gallery_array[j].age;
 
+
+                     var block_gender =  document.createElement('div');
+                    var block_gender =  document.createElement('div');
+                    block_gender.setAttribute("class", "user_card_gender");
+                    block_gender.setAttribute("class", "tag is-rounded");
+                    block_gender.innerHTML = gallery_array[j].gender;
+
+
                     var block_status =  document.createElement('div');
                     block_status.setAttribute("class", "user_card_status");
                      block_status.setAttribute("class", "tag is-rounded");
@@ -341,6 +354,7 @@ function render(i, pageCount)
                       section_location_city.append(block_img);
                       section_location_city.append(block_name);
                       section_location_city.append(block_age);
+                      section_location_city.append(block_gender);
                       section_location_city.append(block_status);
                       section_location_city.append(block_country);
                       section_location_city.append(block_fame);
@@ -352,6 +366,7 @@ function render(i, pageCount)
                       section_location_state.append(block_img);
                       section_location_state.append(block_name);
                       section_location_state.append(block_age);
+                      section_location_state.append(block_gender);
                       section_location_state.append(block_status);
                       section_location_state.append(block_country);
                       section_location_state.append(block_fame);
@@ -363,6 +378,7 @@ function render(i, pageCount)
                       section_location.append(block_img);
                       section_location.append(block_name);
                       section_location.append(block_age);
+                      section_location.append(block_gender);
                       section_location.append(block_status);
                       section_location.append(block_country);
                       section_location.append(block_fame);
@@ -374,6 +390,7 @@ function render(i, pageCount)
                       section.append(block_img);
                       section.append(block_name);
                       section.append(block_age);
+                      section.append(block_gender);
                       section.append(block_status);
                       section.append(block_country);
                       section.append(block_fame);
@@ -402,7 +419,10 @@ window.onload = function()
             {
               i = 0;
               perPage = 20;
-              document.getElementById('form_status').innerHTML = xhr_onwindow.responseText;
+              document.getElementById('gallery_response').innerHTML = "";
+              document.getElementById('gallery_location_response').innerHTML = "";
+              document.getElementById('gallery_location_city_response').innerHTML = "";
+              document.getElementById('gallery_location_state_response').innerHTML = "";
               render(i, perPage);
             }
 
@@ -417,31 +437,6 @@ var show_options = document.getElementById('show_options');
 if(show_options)
 {
   
-  /*var submit_search = new Vue({
-    el: '#show_options',
-    methods:
-    {
-      showDetailed: function(event)
-      {
-        var filter_age_select = document.getElementById('filter_age_select');
-        var filter_fame_select = document.getElementById('filter_fame_select');
-
-          document.getElementById('hide_options').style.display = "block";
-          document.getElementById('show_options').style.display = "none";
-          document.getElementById('hidden_fields').style.display = "block";
-          document.getElementById('filter_age').style.display = "none";
-          document.getElementById('filter_fame').style.display = "none";
-          document.getElementById('age_gap').value = "18 - 100";
-          document.getElementById('fame_gap').value = "1 - 100";
-           document.getElementById('tags-select').disabled = false;
-
-
-        filter_age_select.value = 'none';
-        filter_fame_select.value = 'none';
-      }
-    } 
-  })*/
-
 
   show_options.onclick = function(e)
   {
@@ -510,25 +505,6 @@ var hide_options = document.getElementById('hide_options');
 if(hide_options)
 {
   
-
-  /*var submit_search = new Vue({
-    el: '#hide_options',
-    methods:
-    {
-      hideDetailed: function(event)
-      {
-          document.getElementById('show_options').style.display = "block";
-          document.getElementById('hide_options').style.display = "none";
-          document.getElementById('hidden_fields').style.display = "none";
-          document.getElementById('filter_age').style.display = "block";
-          document.getElementById('filter_fame').style.display = "block";
-          document.getElementById('age_gap').value = "none";
-          document.getElementById('fame_gap').value = "none";
-          document.getElementById('tags-select').disabled = true;
-      }
-    } 
-  })*/
-
   hide_options.onclick = function(e)
   {
     e.preventDefault();
@@ -544,5 +520,3 @@ if(hide_options)
 
 
 }
-
-console.log(age_count);

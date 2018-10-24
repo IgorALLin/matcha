@@ -8,38 +8,39 @@ use DateTimeZone;
 class UserProfileController extends Controller{
 	public function getUserProfile($request, $response){
 		$param = $request->getQueryParams();
-		if(isset($param['photo'])){
+		if(isset($param['photo']))
+		{
 			$this->userProfile->changeMain($param['photo']);
 			return $response->withRedirect($this->router->pathFor('user.profile'));
 		}
 		
 		$userProfile = $this->container->userProfile->getUserProfileByUserId($_SESSION['user']);
-		$fame = $this->container->fame_rating->getRating($_SESSION['user']);	
+		$biography = $this->container->userProfile->get_biography($_SESSION['user']);
+		$fame = $this->container->fame_rating->getRating($_SESSION['user']);
 		$photos = $this->photos->toArray($userProfile);
 		$count = count($photos);
 		$tags = $this->container->tag->get_tags($_SESSION['user']);
 		$tags = array_map(function($elem){return $elem['tag'];}, $tags);
 		$tags = array_unique($tags);
-
 		foreach ($tags as $key => &$value) {
 			$value = '#'.$value;
 		}
-
 		return $this->view->render($response, 'user/profile.twig', [
 			'profile' => $userProfile,
 			'photos' => $photos,
 			'tags' => $tags,
 			'len' => $count,
-			'fame' => $fame
+			'fame' => $fame,
+			'biography' => $biography
 		]);
 	}
+
 
 	public function blacklist($request, $response)
 	{
 			$id = $_SESSION['user'];
 			$res = [];
 			$list = $this->container->userProfile->get_blacklist($id);
-			//var_dump($list);
 			
 			return $this->view->render($response, 'user/blacklist.twig', [
 				'list' => $list
@@ -53,20 +54,44 @@ class UserProfileController extends Controller{
 				$blocker_id = $_SESSION['user'];
 				$id = (int)$param['blacklist_name'];
 				$this->container->userProfile->unblock($id, $blocker_id);
+				$this->chats->enable($blocker_id, $id);
 			}
 
 			return $response->withRedirect($this->router->pathFor('user.blacklist'));
 
-	}
+	}		
+
+	public function error($request, $response)
+	{		
+	
+			return $this->view->render($response, 'user/error.twig');
+
+	}	
 
 	public function postUserProfile($request, $response)
 	{
 		$id = $_SESSION['user'];
+		$error = 0;
+
 		foreach ($_POST as &$value) {
 			$value = htmlspecialchars($value);
 		}
+		if (isset($_POST['gender']) && $_POST['gender'] == "Male" || $_POST['gender'] == "Female" ) 
+			;
+		else if(isset($_POST['gender']))
+			$error = 1;
+		if (isset($_POST['sexualPreferences']) && $_POST['sexualPreferences'] == "Homosexual" || $_POST['sexualPreferences'] == "Bisexual" || $_POST['sexualPreferences'] == "Heterosexual") 
+			;
+		else if(isset($_POST['sexualPreferences']))
+			$error = 1;
+		if($error == 1)
+		{
+			return $response->withRedirect($this->router->pathFor('user.error'));
+		}
+
 		if(isset($_POST['method']) && $_POST['method'] == "addTag")
 		{
+
 			$tags = $_POST['tags'];
 			$split = explode(",", $tags);
 			$newarr = [];
@@ -85,27 +110,31 @@ class UserProfileController extends Controller{
 		{
 			$tags = $this->container->tag->get_tags($id);
 			$res = [];
+			$new = [];
 			foreach ($tags as $key => &$value)
 			{
-			 	foreach ($value as $subvalue)
-			 	{
-			 		array_push($res, '#'.$subvalue);
-			 	}
+			 	$new['tag'] = '#'.$value['tag'];
+			 	$new['id'] = $value['id'];
+			 	array_push($res, $new);
 			}
 			return $response->withJson($res);
 		}
 		if(isset($_POST['method']) && $_POST['method'] == "delTag")
 		{
-			$tag = $_POST['name'];
-			$this->container->tag->del_tags($tag, $id);
+			$tag_id = (int)$_POST['name'];
+
+			$this->container->tag->del_tags($tag_id, $id);
+
 			$tags = $this->container->tag->get_tags($id);
+						var_dump($tags);
 			$res = [];
-			foreach ($tags as $key => &$value)
-			{
-			 	foreach ($value as $subvalue)
-			 	{
-			 		array_push($res, '#'.$subvalue);
-			 	}
+			$new = [];
+			foreach ($tags as $key => $value)
+			{	
+						
+			 	$new['tag'] = '#'.$value['tag'];
+			 	$new['id'] = $value['id'];
+			 	array_push($res, $new);
 			}
 			return $response->withJson($res);
 
@@ -135,12 +164,10 @@ class UserProfileController extends Controller{
 				$equality = $this->container->userProfile->checkifCoordsEqual($id, $latlng['lat'], $latlng['lng']);
 				$autotrigger = $this->container->userProfile->checkAutoTrigger($id);
 				$manualtrigger = $this->container->userProfile->checkManTrigger($id);
-				//if base is void and autotriger is null or always if autotrigger is 1
 				if($equality == 0 || $_POST['submethod'] == "auto") 
 				{
 					if(($lat == "" && $lng == "") || ($lat == "" && $lng != "") || ($lat != "" && $lng == ""))
 					{
-						//$ip_adress = $_SERVER['REMOTE_ADDR'];
 						$ip_adress = $_SERVER['HTTP_CLIENT_IP'];  ///not sure about it, but remote_addr(seems like most reasonable) isn't working
 						$str = 'http://www.geoplugin.net/php.gp?ip='.$ip_adress;
 						$data = unserialize(file_get_contents($str));
@@ -153,13 +180,6 @@ class UserProfileController extends Controller{
 						$data = json_decode(file_get_contents($str), true);
 					}
 
-				/*	else
-					{
-						$str = 'https://maps.googleapis.com/maps/api/geocode/json?latlng='.$lat.','.$lng.'&key=AIzaSyCbq4TwFnX63gTe4O0DytyUU9XOXDEXdIY';
-						$data = json_decode(file_get_contents($str), true);
-
-
-					}*/
 					$latlng = $this->parseLatLng($data);
 					$country = $this->parseCountry($data);
 					$state = $this->parseState($data);
@@ -210,19 +230,11 @@ class UserProfileController extends Controller{
 		{
 
 	 		$photos = $this->photos->get($request);
+	 		if($photos){
+				$this->userProfile->mark_profile_as_filled($_SESSION['user']);
+			}
 
 	 		$param = $request->getParsedBody();
-
-	 		/*$paramSet = [];
-	 		$paramSet['country'] = explode(':', $_POST['country'])[1];
-	 		$paramSet['state'] = explode(':', $_POST['state'])[1];		
-	 		$paramSet['city'] = explode(':', $_POST['city'])[1];
-
-	 		$country = $this->standartize($paramSet, "country");
-	 		$state = $this->standartize($paramSet, "state");
-	 		$city = $this->standartize($paramSet, "city");
-	 		$latLng = $this->standartize($paramSet, "latLng");
-			*/
 	 		$userData = array(
 	 			'firstName' => $param['firstName'],
 	 			'lastName' => $param['lastName'],
@@ -319,7 +331,7 @@ class UserProfileController extends Controller{
 
 	public function parseCity($data)
 	{
-		$result;
+		$result = NUll;
 		foreach ($data['results'] as $level1){
 			 	if(!empty($level1['address_components'])){
 			 		foreach ($level1['address_components'] as $level2) {
@@ -338,6 +350,13 @@ class UserProfileController extends Controller{
 
 			}
 		return($result);
+	}
+
+	public function fake($request, $response){
+		$param =$request->getParsedBody();
+		if($param['id'] && !$this->fake->exist($_SESSION['user'], $param['id'])){
+			$this->fake->mark($_SESSION['user'], $param['id']);
+		}
 	}
 }
 

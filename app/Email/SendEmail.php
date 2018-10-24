@@ -27,6 +27,8 @@ class SendEmail {
 		$this->send($mail, $message, $subject);
 	}
 
+
+
 	public function visitedNotification($profile){
 		$message = '<html><body>';
 		$message .= 'Hello <b>'.$profile['firstName'].'</b><br>';
@@ -40,26 +42,11 @@ class SendEmail {
 		
 	}
 
-	/*public function passwordRecovery($randomPass) {
-		$this->message = 'Hello '.$this->uname.'<br>';
-		$this->message .= 'Youre new password is '.$randomPass.'<br>';
-		$this->subject = 'Password recovery on camgru';
-		$this->send();
-	}
-
-	public function commet_message () {
-		$this->message = 'Hi '.$this->uname.'</b><br>';
-		$this->message .= 'You have new comment under youre photo';
-		$this->subject = 'Comment under youre pfoto';
-		$this->send();
-	}*/
-
 	private function send($email, $message, $subject) {
 		$headers  = "Content-type: text/html; charset=windows-1251 \r\n"; 
 		$headers .= "From: ".self::$from."\r\n"; 
 		$headers .= "Reply-To: reply-to@example.com\r\n";
 		mail('somefellavs@gmail.com', $subject, $message, $headers);
-		//mail($email, $subject, $message, $headers);
 	}
 }
 

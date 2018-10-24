@@ -21,17 +21,17 @@ class ChatMessages {
         return  $stmt->fetchAll(\PDO::FETCH_ASSOC); 
     }
 
-    public function save($msg, $chat_id, $sender_id){
+    public function save($message, $chat_id, $sender_id){
         $sql = "INSERT INTO `messages` (`chat_id`, `sender_id`, `text`)
-                VALUES (:chat_id, :sender_id, :msg)";
+                VALUES (:chat_id, :sender_id, :message)";
         $stmt = $this->container->db->prepare($sql);
         $stmt->bindParam(':chat_id', $chat_id);
-        $stmt->bindParam(':msg', $msg);
+        $stmt->bindParam(':message', $message);
         $stmt->bindParam(':sender_id', $sender_id);
         $stmt->execute();
     }
 
-    public function get_last_mesasge_time($chat_id) {
+      public function get_last_mesasge_time($chat_id) {
         $sql = "SELECT `time` 
                 FROM `messages`
                 WHERE `chat_id` = :chat_id

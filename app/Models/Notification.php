@@ -5,8 +5,8 @@ namespace App\Models;
 Class Notification {
     private $container;
 
-	public function __construct($container){
-		$this->container = $container;
+    public function __construct($container){
+        $this->container = $container;
     }
     
     public function save($user_id, $user1_id, $type){

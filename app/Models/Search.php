@@ -53,10 +53,11 @@ class Search{
 			$stmt = $this->db->prepare($sql);
 			$stmt->execute();
 			$tags_id = $stmt->fetchAll();
+			$tags_id = array_map(function($elem){return $elem['id'];}, $tags_id);
+			$tags_str = implode(",", $tags_id);
 		}
 		
-		$tags_id = array_map(function($elem){return $elem['id'];}, $tags_id);
-		$tags_str = implode(",", $tags_id);
+		
 
 		$sql = "SELECT users.id,users.email, users.firstName, users.lastName, user_profile.photos,
 					user_profile.gender, user_profile.biography, 
@@ -83,7 +84,7 @@ class Search{
 					WHERE user_profile.sexualPreferences = '$prefer'
 					AND users.id <> '$id' " : 0;
 
-		$sql .="AND NOT EXISTS (SELECT * FROM blocked WHERE blocked_id = users.id AND blocker_id = '$id') ";			
+		$sql .="AND NOT EXISTS (SELECT * FROM blocked WHERE blocked_id = users.id AND blocker_id = '$id') AND user_profile.filled = 1";			
 
 		($age != 0 ) ? $sql .="
 				AND TIMESTAMPDIFF(YEAR, user_profile.dateOfBirth, CURDATE()) = '$age'" : 0;

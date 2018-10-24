@@ -2,15 +2,29 @@
 
 {% block content %}
 
-<div id="visits">
+<div id="toTop">^ Back to Top</div>
+ {% if visits %}
+        <div><button class="button is-info button_history" id="delete_all_visits">Clear history</button></div>
+  {% endif %}      
+  <div id="visits" class="browsing_history"></div>
+<!--<div id="visits" class="browsing_history">
     {% if visits %}
-        <p id="delete_all_visits">Clear history</p>
+        <div><button class="button is-info button_history" id="delete_all_visits">Clear history</button></div>
         {% for key,value in visits %}
-        <p>
-            You wached <a href="{{ base_url() }}/show?profile={{value['visited_id']}}">{{value['firstName']}} {{value['lastName']}} </a>profile {{value['time']}}
-        </p>
+        <div class="box">
+            You watched <a href="{{ base_url() }}/show?profile={{value['visited_id']}}">{{value['firstName']}} {{value['lastName']}} </a> &nbsp; profile {{value['time']}}
+        </div>
         {% endfor %}
     {% endif %}
-</div>
+</div>-->
 
 {% endblock %}
+{% block javascript %}
+    {{ parent() }}
+    <script>
+      var notifications = '{{ notifications }}';
+    </script>
+    <script src="{{base_url()}}/public/js/history.js"></script>
+
+{% endblock %}
+

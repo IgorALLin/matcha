@@ -14,6 +14,7 @@ $(document).ready(function() {
 		method: "GET",
 		success: function(data) 
 		{
+			console.log(data)
 			if(data){
 				//Get count of unreaded notifications and unreand chats messages and insert to the header
 				count_unread();
@@ -24,80 +25,6 @@ $(document).ready(function() {
 			}
 		}
 	});
-
-	/********* Navbar ***********/
-
-	//switch navbar items
-	if(page === 'notifications')
-		$('#collapsingNavbar3 ul li').eq(1).addClass('active');
-	else if(page === 'browsing_history')
-		$('#collapsingNavbar3 ul li').eq(2).addClass('active');
-	else if(page === 'search')
-		$('#collapsingNavbar3 ul li').eq(0).addClass('active');
-	else if(page === 'chats')
-		$('#collapsingNavbar3 ul li').eq(3).addClass('active');
-
-
-	
-	/********* Notification page ***********/
-
-	//mark notification as viewed
-	$('.not_viewed').on('click', function(){
-		var data = {
-			'id': $(this).parent().attr('data-id')
-		};
-		
-		$.ajax({
-			url: 'user/notifications/viewed',
-			method: "POST", 
-			data: data,
-			success: function(data) 
-			{
-				$("[data-id=" + data + "]").find('span').eq(0).removeClass('not_viewed').addClass('viewed');
-				$("#notifications_count").text($("#notifications_count").text() - 1);
-			}
-		});
-	})
-
-	//delete notification
-	$('.delete_notification').on('click', function(){
-		let data = {
-			'id': $(this).parent().attr('data-id')
-		};
-
-		if($(this).parent().find('span').eq(0).hasClass('not_viewed'))
-			$("#notifications_count").text($("#notifications_count").text() - 1);
-		$.ajax({
-			url: 'user/notifications/delete',
-			method: "POST", 
-			data: data,
-			success: function(data) 
-			{
-				id(data)
-					$("[data-id=" + data + "]").toggle('slow');
-			}
-		});
-	})
-
-	//delete all notifications
-	$('#delete_all_notifications').on('click', function(){
-		let data = {
-			'id': 'all'
-		};
-
-		$.ajax({
-			url: 'user/notifications/delete',
-			method: "POST", 
-			data: data,
-			success: function(data) 
-			{
-				$("#notifications_count").text(0);
-				$("#notification").children().toggle('slow');
-			}
-		});
-	})
-
-
 
 	/********* Browsing history page ***********/
 
@@ -143,9 +70,22 @@ $(document).ready(function() {
 	    });
 	});
 
-
-	/********* Chat page ***********/
-
+	$('#fake').on('click', function(){
+		let data = {
+	        'id': $(this).attr('data-id')
+		}
+		$.ajax({
+	        url: 'user/report_as_fake',
+	        method: "POST",
+	        data: data,
+	        success: function(data) 
+	        {
+				$('#block_response').text('Reported');
+	        	/*if(data.chanel)
+	        		connect_to_chat_chanel(data.chanel);*/
+	        }
+	    });
+	});
 
 	/********* Chat page ***********/
 	$('#send_message').on('click', function(){
@@ -156,8 +96,9 @@ $(document).ready(function() {
 			$('#message').val('');
 			//save_chat_message($message);
 		}
-	})
+	});
 });
+
 
 /********* Functions ***********/
 
@@ -182,14 +123,8 @@ function connect_to_notifications_chanel(){
 	channel.bind('notification', function(data) {
 		let audio = new Audio('public/sounds/notification.mp3');
 		audio.play();
-		console.log(data)
-		if(data.type && data.type === 'from-chat'){
-			if(data.from-chanel !== page) {
-				$("#chats_notifications_count").text(Number($("#notifications_count").text()) + 1);
-			}
-		}
-		else
-			$("#notifications_count").text(Number($("#notifications_count").text()) + 1);
+
+		$("#notifications_count").text(Number($("#notifications_count").text()) + 1);
 
 		if(data.chanel){
 			connect_to_chat_chanel(data.chanel);
@@ -207,7 +142,9 @@ function connect_to_chats_chanels(){
 		method: "GET",
 		success: function(data) 
 		{
+			console.log(data)
 			if(data){
+				
 				data.forEach(function(chat_id){
 					connect_to_chat_chanel(chat_id);
 				})
@@ -218,11 +155,10 @@ function connect_to_chats_chanels(){
 
 function connect_to_chat_chanel(chat_id){
 	let channel = pusher.subscribe('chat-' + chat_id);
-
+	console.log('connected to chanel: ' + chat_id)
 	channel.bind('message', function(data) {
+		console.log(data)
 		$('#messages').append('<p>' + data.message + '</p>');
-		/*if(data.user === $user_id)
-			$('#messages').children().last().css('float', 'right')*/
 	});
 }
 
@@ -233,16 +169,6 @@ function count_unread() {
 		success: function(data) 
 		{
 			$("#notifications_count").text(Number(data));
-		}
-	});
-
-	$.ajax({
-		url: 'chats/count',
-		method: "POST",
-		success: function(data) 
-		{
-			console.log(data)
-			$("#chats_notifications_count").text(Number(data));
 		}
 	});
 }

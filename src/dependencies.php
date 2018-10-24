@@ -37,8 +37,23 @@ $container['view'] = function ($container) {
 	return $view;
 };
 
+$container['fake'] = function($container) {
+	return new \App\Models\Fake($container);
+};
+
+$container['blocked'] = function($container) {
+	return new \App\Models\Blocked($container);
+};
+
+$container['people'] = function($container) {
+	return new \App\Config\People($container);
+};
+
 $container['search'] = function($container) {
 	return new \App\Models\Search($container->db);
+};
+$container['BasicSearch'] = function($container) {
+	return new \App\Models\BasicSearch($container->db);
 };
 
 $container['chat_messages'] = function($container) {
@@ -51,10 +66,6 @@ $container['chats'] = function($container) {
 
 $container['notification'] = function($container) {
 	return new \App\Models\Notification($container);
-};
-
-$container['people'] = function($container) {
-	return new \App\Config\People($container);
 };
 
 $container['user'] = function($container) {
@@ -81,16 +92,16 @@ $container['fame_rating'] = function($container) {
 	return new \App\Models\FameRating($container);
 };
 
-$container['validator'] = function($container) {
-	return new \App\Validation\Validator($container);
-};
-
 $container['ChatsController'] = function($container) {
 	return new \App\Controllers\User\ChatsController($container);
 };
 
 $container['BrowsingHistoryController'] = function($container) {
 	return new \App\Controllers\User\BrowsingHistoryController($container);
+};
+
+$container['validator'] = function($container) {
+	return new \App\Validation\Validator($container);
 };
 
 $container['TestController'] = function($container) {
@@ -137,10 +148,6 @@ $container['photos'] = function($container) {
 	return new \App\Profile\Photos($container);
 };
 
-$container['TestController'] = function($container) {
-	return new \App\Controllers\TestController($container);
-};
-
 $container['geo'] = function() {
 	return new \App\Config\Geo();
 };
@@ -155,6 +162,9 @@ $container['NotificationController'] = function($container) {
 
 $container['SearchController'] = function($container) {
 	return new \App\Controllers\User\SearchController($container);
+};
+$container['BasicsearchController'] = function($container) {
+	return new \App\Controllers\User\BasicsearchController($container);
 };
 
 $container['ShowProfileController'] = function($container) {

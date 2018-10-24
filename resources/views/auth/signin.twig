@@ -8,7 +8,7 @@
                     <div class="field">
                         <div class="control">
                              <label>Username must contain only latinic letters or digits</label>
-                            <input class="form-control{{errors.username ? ' is-invalid' : '' }} input" pattern="[a-zA-Z0-9]+" maxlength="42" placeholder="Username" name="username" type="text" value="{{ old.username }}">
+                            <input class="form-control{{errors.username ? ' is-invalid' : '' }} input" required="required" pattern="[a-zA-Z0-9]+" placeholder="Username" name="username" type="text" value="{{ old.username }}">
                             {% if errors.username %}
                                 <div class="invalid-feedback">{{ errors.username }}</div>
                             {% endif %}
@@ -17,7 +17,7 @@
                     <div class="field">
                         <div class="control">
                             <label >Password must contain at least 1 difit, 1 uppercase letter and 1 lowercase letter, it must be 6+ symbols</label>
-                            <input class="form-control{{errors.password ? ' is-invalid' : '' }} input" placeholder="Password" name="password" value="" type="password">
+                            <input class="form-control{{errors.password ? ' is-invalid' : '' }} input" required="required" pattern="^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=\S+$).{6,}$"placeholder="Password" name="password" value="" type="password">
                             {% if errors.password %}
                                 <div class="invalid-feedback">{{ errors.password }}</div>
                             {% endif %}

@@ -8,7 +8,7 @@
                         <div class="field">
                             <div class="control"> 
                                 <label>Username must contain only latinic letters or digits</label>
-                            <input class="form-control{{errors.username ? ' is-invalid' : '' }} input" pattern="[a-zA-Z0-9]+" placeholder="Username" name="username" value="{{ old.username }}" type="text">
+                            <input class="form-control{{errors.username ? ' is-invalid' : '' }} input" required="required" pattern="[a-zA-Z0-9]+" placeholder="Username" name="username" value="{{ old.username }}" type="text">
                             </div>
                             {% if errors.username %}
                                 <div >{{ errors.username }}</div>
@@ -16,7 +16,7 @@
                         </div>
                         <div class="field">
                             <div class="control">
-                            <input class="form-control{{errors.email ? ' is-invalid' : '' }} input" type="email" placeholder="E-mail Address" name="email"  value="{{ old.email }}">
+                            <input class="form-control{{errors.email ? ' is-invalid' : '' }} input" required="required" type="email" placeholder="E-mail Address" name="email"  value="{{ old.email }}">
                             </div>
                             {% if errors.email %}
                                 <div >{{ errors.email }}</div>
@@ -25,7 +25,7 @@
                         <div class="field">
                             <div class="control">
                                   <label>Username must contain only latinic letters or digits</label>
-                            <input class="form-control{{errors.firstName ? ' is-invalid' : '' }} input" pattern="[a-zA-Z0-9]+" placeholder="First name" name="firstName" value="{{ old.firstName }}" type="text">
+                            <input class="form-control{{errors.firstName ? ' is-invalid' : '' }} input" required="required" pattern="[a-zA-Z0-9]+" placeholder="First name" name="firstName" value="{{ old.firstName }}" type="text">
                             </div>
                             {% if errors.firstName %}
                                 <div >{{ errors.firstName }}</div>
@@ -34,7 +34,7 @@
                         <div class="field">
                             <div class="control">
                                   <label>Username must contain only latinic letters or digits</label>
-                            <input class="form-control{{errors.lastName ? ' is-invalid' : '' }} input" pattern="[a-zA-Z0-9]+"  placeholder="Last name" name="lastName" value="{{ old.lastName }}" type="text">
+                            <input class="form-control{{errors.lastName ? ' is-invalid' : '' }} input" required="required" pattern="[a-zA-Z0-9]+"  placeholder="Last name" name="lastName" value="{{ old.lastName }}" type="text">
                             </div>
                             {% if errors.lastName %}
                                 <div >{{ errors.lastName }}</div>
@@ -43,7 +43,7 @@
                         <div class="field">
                             <div class="control">
                                  <label >Password must contain at least 1 difit, 1 uppercase letter and 1 lowercase letter, it must be 6+ symbols</label>
-                            <input class="form-control{{errors.password ? ' is-invalid' : '' }} input" pattern="^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=\S+$).{6,}$"   placeholder="Password" name="password" value="" type="password">
+                            <input class="form-control{{errors.password ? ' is-invalid' : '' }} input" required="required" pattern="^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=\S+$).{6,}$"   placeholder="Password" name="password" value="" type="password">
                             </div>
                             {% if errors.password %}
                                 <div >{{ errors.password }}</div>
@@ -51,7 +51,7 @@
                         </div>
                         <div class="field">
                             <div class="control">
-                            <input class="form-control{{errors.confirmPassword ? ' is-invalid' : '' }} input" pattern="^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=\S+$).{6,}$" placeholder="Confirm Password" name="confirmPassword" value="" type="password">
+                            <input class="form-control{{errors.confirmPassword ? ' is-invalid' : '' }} input" required="required" pattern="^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=\S+$).{6,}$" placeholder="Confirm Password" name="confirmPassword" value="" type="password">
                             </div>
                             {% if errors.confirmPassword %}
                                 <div >{{ errors.confirmPassword }}</div>

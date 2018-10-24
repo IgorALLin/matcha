@@ -14,7 +14,7 @@ class TagsController extends Controller{
 
 	public function get_tags($request, $response) {
 		$tags = $this->tag->get_tags($_SESSION['user']);
-		echo json_encode($tags);
+	
  		exit();
 	}
 }

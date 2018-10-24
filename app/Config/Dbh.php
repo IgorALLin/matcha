@@ -61,10 +61,16 @@ class Dbh{
 				`sity` TEXT,
 				`dateOfBirth` DATE,
 				`user_id` INT(11) NOT NULL,
+				`filled` BIT DEFAULT 0,
 				`language` VARCHAR(255),
 				FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 	      	)",
 
+	      	"blocked" => "CREATE TABLE IF NOT EXISTS `blocked` (
+	      		`id` INT (11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+				`blocked_id` INT (11) NOT NULL,
+				`blocker_id` INT (11) NOT NULL
+	      	)",
 
 	      	"user_position" => "CREATE TABLE IF NOT EXISTS `user_position` (
 				`id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -126,21 +132,21 @@ class Dbh{
 				`tag` VARCHAR(255) NOT NULL,
 				PRIMARY KEY (`id`)
 			)",
-				
+
 			"users_tags" => "CREATE TABLE IF NOT EXISTS `users_tags` (
 				`tag_id` int(11) NOT NULL,
 				`user_id` int(11) NOT NULL,
-				FOREIGN KEY (tag_id) REFERENCES tags(id) ON DELETE CASCADE,
 				FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 			)",
 
 			"fame_rating" => "CREATE TABLE IF NOT EXISTS `fame_rating` (
 				`id` int(11) NOT NULL AUTO_INCREMENT,
-				`rating` int(11) NOT NULL DEFAULT '1',
+				`rating` int(11) NOT NULL NOT NULL DEFAULT '1',
 				`user_id` int(11) NOT NULL,
 				PRIMARY KEY (`id`),
 				FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 			)",
+
 
 			"notification_types" => "CREATE TABLE IF NOT EXISTS `notification_types` (
 				`id` int(11) NOT NULL AUTO_INCREMENT,
@@ -167,7 +173,6 @@ class Dbh{
 				`user1_id` int(11) NOT NULL,
 				`active` BIT DEFAULT 1,
 				`chanel` VARCHAR(50),
-				`viewed` BIT DEFAULT 0,
 				`last_message` TIMESTAMP,
 				PRIMARY KEY (`id`),
 				FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
@@ -178,9 +183,18 @@ class Dbh{
 				`chat_id` int(11) NOT NULL,
 				`sender_id` int(11) NOT NULL,
 				`text` varchar(8000),
+				`viewed` BIT DEFAULT 0,
 				`time` TIMESTAMP,
 				FOREIGN KEY (sender_id) REFERENCES users(id) ON DELETE CASCADE,
 				FOREIGN KEY (chat_id) REFERENCES chats(id) ON DELETE CASCADE
+			)",
+
+			"fake" => "CREATE TABLE IF NOT EXISTS `fake` (
+				`reporter_id` int(11) NOT NULL,
+				`user_id` int(11) NOT NULL,
+				`time` TIMESTAMP,
+				FOREIGN KEY (reporter_id) REFERENCES users(id) ON DELETE CASCADE,
+				FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 			)",
 		];
 
@@ -194,7 +208,6 @@ class Dbh{
 
 		$container->people->insertPeoples($this->connection);
 
-		//insert notification_types if not exist
 		$insert_n_types = new Fill_notification_types($this->connection);
 		$insert_n_types->fill();
 

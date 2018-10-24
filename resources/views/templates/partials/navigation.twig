@@ -10,10 +10,13 @@
 
 
                 <div class="link_wrapper link_wrapper_1"><a class="button is-link" href="{{ path_for('search') }}">Search</a></div>
-                <div class="link_wrapper link_wrapper_2"><a class="button is-link" href="{{ path_for('user.notifications') }}">Notifications</a></div>
+                {% if auth.is_filled %}
+                <div class="link_wrapper link_wrapper_2 notifications_alarm_wrapper"><a class="button is-link" href="{{ path_for('user.notifications') }}">Notifications</a>
+                 
+                   <div class="link_wrapper link_wrapper_2"><div class="notifications_alarm"><span class="icon "><i class="fas fa-envelope"></i></span><div id="notifications_count"></div></div></div></div>
                   <div class="link_wrapper link_wrapper_2"><a class="button is-link" href="{{ path_for('user.browsing_history') }}">Browsing history</a></div>
                     <div class="link_wrapper link_wrapper_2"><a class="button is-link" href="{{ path_for('chats') }}">Chats</a></div>
-
+                {% endif %} 
       
     </div>
       {% if auth.check %}
@@ -36,9 +39,9 @@
                             <a class="dropdown_menu_item" href="{{ path_for('user.profile') }}">Profile</a>
          
                             <a class="dropdown_menu_item" href="{{ path_for('auth.password.change') }}">Change password</a>
-                     
+                          {% if auth.is_filled %}       
                             <a class="dropdown_menu_item" href="{{ path_for('user.blacklist') }}">Blacklist</a>
-
+                          {% endif %} 
                              <a class="dropdown_menu_item" href="{{ path_for('auth.signout') }}">Sign Out</a>
                         
                     </div>

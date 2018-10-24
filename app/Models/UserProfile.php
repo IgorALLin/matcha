@@ -21,11 +21,11 @@ class UserProfile{
 	public function getUserProfileById($id){
 		$sql = "SELECT users.email, users.firstName, users.lastName, user_profile.photos, user_profile.gender, user_profile.biography, 
 					user_profile.dateOfBirth, user_profile.mainPhoto, user_profile.id,
-					user_profile.gender, user_profile.country, user_profile.sity, user_profile.state,
+					user_profile.gender, user_profile.country, user_profile.sity, user_profile.state, user_profile.sexualPreferences,
 					TIMESTAMPDIFF(YEAR, user_profile.dateOfBirth, CURDATE()) AS age,
 					IF(TIMESTAMPDIFF(MINUTE, users.lastActivity, NOW()) > 15, users.lastActivity, 'ONLINE') as status
 					FROM `user_profile`
-					INNER JOIN `users` ON user_profile.user_id = users.id
+					INNER JOIN `users` ON user_profile.user_id= users.id
 					WHERE user_profile.id = :id";
 		$stmt = $this->db->prepare($sql);
 		$stmt->execute(array(':id' => $id));
@@ -63,30 +63,31 @@ class UserProfile{
 	}
 
 	public function saveUserData($data, $id)
+	 {
+
+		if(!$this->getUserDataByUserId($id))
+		{
+			$sql = "INSERT INTO `users`
+							(`firstName`, `lastName`, `email`)
+							VALUES (:firstName, :lastName, :email)";				
+		}
+		else
+		{
+			$sql = "UPDATE `users` SET
+						firstName = :firstName, lastName = :lastName, email = :email
+						WHERE `id` = '$id'";
+		}
+
+		$stmt = $this->db->prepare($sql);
+		$stmt->bindParam(':firstName', $data['firstName']);
+		$stmt->bindParam(':lastName', $data['lastName']);
+		$stmt->bindParam(':email', $data['mail']);
+		$stmt->execute();
+		
+	}
+
+	public function changeMain($newMain)
 	{
-
-	   if(!$this->getUserDataByUserId($id))
-	   {
-		   $sql = "INSERT INTO `users`
-						   (`firstName`, `lastName`, `email`)
-						   VALUES (:firstName, :lastName, :email)";				
-	   }
-	   else
-	   {
-		   $sql = "UPDATE `users` SET
-					   firstName = :firstName, lastName = :lastName, email = :email
-					   WHERE `id` = '$id'";
-	   }
-
-	   $stmt = $this->db->prepare($sql);
-	   $stmt->bindParam(':firstName', $data['firstName']);
-	   $stmt->bindParam(':lastName', $data['lastName']);
-	   $stmt->bindParam(':email', $data['mail']);
-	   $stmt->execute();
-	   
-   }
-
-	public function changeMain($newMain){
 		$profile = $this->getUserProfileByUserId($_SESSION['user']);
 		$photos = explode(',', $profile['photos']);
 		$newMain = (int)$newMain;
@@ -99,6 +100,7 @@ class UserProfile{
 			$this->save($new);
 		}
 	}
+
 
 	public function savePosition($id, $latLng, $country, $state, $city, $method)
 	{
@@ -158,20 +160,23 @@ class UserProfile{
 	}
 	public function checkifCoordsEqual($id, $lat, $lng)
 	{
-		$sql = "SELECT `lat` FROM `user_position` WHERE `user_id` = '$id' UNION SELECT `lng` FROM `user_position` WHERE `user_id` = '$id'"; //need to recode this statement 
+		$sql = "SELECT `lat` FROM `user_position` WHERE `user_id` = '$id' UNION SELECT `lng` FROM `user_position` WHERE `user_id` = '$id'"; 
 		$stmt = $this->db->prepare($sql);
 		$stmt->execute();
 		$res = $stmt->fetchAll(\PDO::FETCH_ASSOC);
-		if($lat == $res[0]['lat'] && $lng == $res[1]['lat'])
+		if($res)
 		{
-			return 1;
-		}
-		else if(empty($res))
-		{
-			return 0;
-		}
-		else
-			return 2;
+			if($lat == $res[0]['lat'] && $lng == $res[1]['lat'])
+			{
+				return 1;
+			}
+			else if(empty($res))
+			{
+				return 0;
+			}
+			else
+				return 2;
+		}	
 	}
 
 	public function switchTrigger($id, $method)
@@ -208,6 +213,16 @@ class UserProfile{
 		$stmt = $this->db->prepare($sql);
 		$stmt->execute();
 		$res = $stmt->fetch(\PDO::FETCH_ASSOC);
+		return $res;
+	}
+
+	public function get_biography($id)
+	{
+		$sql = "SELECT biography FROM user_profile WHERE id = '$id'";
+		$stmt = $this->db->prepare($sql);
+		$stmt->execute();
+		$res = $stmt->fetch(\PDO::FETCH_ASSOC);
+		$res = $res['biography'];
 		return $res;
 	}
 
@@ -254,6 +269,26 @@ class UserProfile{
 		$sql = "DELETE FROM blocked WHERE blocked_id = '$id' AND blocker_id = '$blocker'";
 		$stmt = $this->db->prepare($sql);
 		$stmt->execute();	
+	}
+
+	public function is_filled($user_id){
+		$sql = "SELECT `filled`
+				FROM `user_profile`
+				WHERE `user_id` = :user_id";
+		$stmt = $this->db->prepare($sql);
+		$stmt->bindParam(':user_id', $user_id);
+		$stmt->execute();
+
+		return $stmt->fetchColumn();
+	}
+
+	public function mark_profile_as_filled($user_id){
+		$sql = "UPDATE `user_profile`
+				SET `filled` = 1
+				WHERE `user_id` = :user_id";
+		$stmt = $this->db->prepare($sql);
+		$stmt->bindParam(':user_id', $user_id);
+		$stmt->execute();
 	}	
 }
 

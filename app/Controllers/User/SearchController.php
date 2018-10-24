@@ -7,6 +7,9 @@ use App\Controllers\Controller;
 class SearchController extends Controller{
 	public function search($request, $response)
 	{
+		if(!$this->auth->is_filled())
+			return $this->view->render($response, 'search_basic.twig');
+
 		$age_max = $this->container->search->get_age_max();
 		$fame_max = $this->container->search->get_fame_max();
 		$age_max = (int)$age_max;
@@ -21,11 +24,8 @@ class SearchController extends Controller{
 	}
 
 	public function filters($request, $response) {
-
 		$id = $_SESSION['user'];
 
-		
-	
 		if (isset($_POST['method']) && $_POST['method'] == "setAutoPosition")
 		{	
 			$dataFromBase = $this->container->search->getPositionFromBase($id);
@@ -66,7 +66,7 @@ class SearchController extends Controller{
 			$country = $this->container->UserProfileController->parseCountry($data);
 			$state = $this->container->UserProfileController->parseState($data);
 			$city = $this->container->UserProfileController->parseCity($data);
-			$res['country'] = $country['country'];
+			$res['country'] = htmlspecialchars($country['country']);
 			$res['country_code'] = $country['country_code'];
 			$res['state'] = $state;
 			$res['city'] = $city;
@@ -77,13 +77,63 @@ class SearchController extends Controller{
 		if(isset($_POST['method']) && $_POST['method'] == "fuck")
 		{
 			$filters = $request->getParsedBody();
-
 			return ;
 		}
 		if(isset($_POST['method']) && $_POST['method'] == "showGallery")
 		{
+				
+			$errors = 0;
 			$filters = $request->getParsedBody();
-			return $this->getIntrestingProfiles($_SESSION['user'], $filters);
+
+			if($filters['location_filter'] == "none" || $filters['location_filter'] == "City" || $filters['location_filter'] == "State" || $filters['location_filter'] == "Country")
+				;
+			else
+				$errors = 1;
+			if($filters['sort_fame'] == "none" || $filters['sort_fame'] == "ascending" || $filters['sort_fame'] == "descending")
+				;
+			else
+				$errors = 1;
+			if($filters['sort_tags'] == "more" || $filters['sort_tags'] == "less")
+				;
+			else
+				$errors = 1;
+			if($filters['sort_age'] == "none" || $filters['sort_age'] == "ascending" || $filters['sort_age'] == "descending")
+				;
+			else
+				$errors = 1;
+			if($filters['filter_age'] == "none" || is_numeric($filters['filter_age']))
+				;
+			else
+				$errors = 1;
+			if($filters['filter_fame'] == "none" || is_numeric($filters['filter_fame']))
+				;
+			else
+				$errors = 1;
+			if(preg_match('(^\d{1,3}\s{1}[-]{1}\s{1}\d{1,3}$)', $filters['age_gap']))
+				;
+			else
+				$errors = 1;
+			if(preg_match('(^\d{1,9}\s{1}[-]{1}\s{1}\d{1,9}$)', $filters['fame_gap']))
+				;
+			else
+				$errors = 1;
+			/*if(preg_match('(/\d+[\s]{1}[-]{1}[\s]{1}/\d+)', $filters['fame_gap']))
+				;
+			else
+				$errors = 1;
+			*/
+			if($errors == 1)
+			{
+				
+				return $response->withJson("error");
+			}
+			else
+			{
+				$filters['country'] = htmlspecialchars($filters['country']);
+				$filters['city'] = htmlspecialchars($filters['city']);
+				$filters['state'] = htmlspecialchars($filters['state']);
+				return $this->getIntrestingProfiles($_SESSION['user'], $filters);
+			}	
 		}
 		if(isset($_POST['method']) && $_POST['method'] == "getMaxValues")
 		{
@@ -127,7 +177,8 @@ class SearchController extends Controller{
 	}
 
 	public function getIntrestingProfiles($id, $filters) {
-
+	
+		$position = NULL;
 		$id = $_SESSION['user'];
 		$profile = $this->container->userProfile->getUserProfileByUserId($id);
 		if($filters == NULL)
@@ -223,6 +274,8 @@ class SearchController extends Controller{
 		isset($filters['sort_tags']) ? $result['sort_tags'] = $filters['sort_tags'] : 0;
 		return $result;
 	}
+
+
 }
 
 ?>

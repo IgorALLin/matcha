@@ -3,13 +3,13 @@
 namespace App\Models;
 
 class Chats {
-	private $container;
+    private $container;
 
-	public function __construct($container){
-		$this->container = $container;
-	}
+    public function __construct($container){
+        $this->container = $container;
+    }
 
-	public function get_chats_list($uid) {
+    public function get_chats_list($uid) {
         $sql = "SELECT user_profile.mainPhoto,
                        user_profile.id,
                        (
@@ -158,18 +158,6 @@ class Chats {
         $stmt->bindParam(':id', $id);
         $stmt->execute();
 
-    }
-
-    public function count($user_id){
-        $sql = "SELECT COUNT(*)
-                FROM `chats`
-                WHERE `user_id` = :user_id OR `user1_id` = :user_id
-                AND `viewed` = 0";
-        $stmt = $this->container->db->prepare($sql);
-        $stmt->bindParam(':user_id', $user_id);
-        $stmt->execute();
-
-        return $stmt->fetchColumn();
     }
 }
 

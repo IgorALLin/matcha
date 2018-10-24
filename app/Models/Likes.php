@@ -54,8 +54,6 @@ class Likes{
 				LIMIT {$start},{$finish}";
 		$stmt = $this->container->db->prepare($sql);
 		$stmt->bindParam(':like_id', $like_id);
-		//$stmt->bindParam(':start', $start, \PDO::PARAM_INT);
-		//$stmt->bindParam(':finish', $finish, \PDO::PARAM_INT);
 		$stmt->execute();
 
 		return $stmt;
@@ -71,8 +69,6 @@ class Likes{
 				LIMIT {$start},{$finish}";
 		$stmt = $this->container->db->prepare($sql);
 		$stmt->bindParam(':liked_id', $liked_id);
-		//$stmt->bindParam(':start', $start, \PDO::PARAM_INT);
-		//$stmt->bindParam(':finish', $finish, \PDO::PARAM_INT);
 		$stmt->execute();
 		
 		return $stmt;

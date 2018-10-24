@@ -1,7 +1,7 @@
 {% extends 'templates/app.twig' %}
 
 {% block content %}
-
+    <div id="toTop"> ^ Back to top</div>
     <div class="search_container" id="search">
         <form action="{{ path_for('search') }}" method="post" id="search_form" class="search_filters">
             <p>Filter by:</p>
@@ -366,7 +366,7 @@
     {{ parent() }}
 
 
-    <script src="{{base_url()}}/public/js/searchGeo.js" ></script>
+      <script src="{{base_url()}}/public/js/searchGeo.js" ></script>
     <script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAWy09HNMsO_0vvizAktk85EUvjW0kDTVg&libraries=places&callback=initMapSearch" async></script>
     <script language="JavaScript" src="http://www.geoplugin.net/javascript.gp" type="text/javascript"></script> 
     <script src="{{base_url()}}/public/js/jquery.multi-select.js"></script>

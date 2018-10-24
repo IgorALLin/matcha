@@ -19,15 +19,14 @@ class Tag {
 		return $stmt->fetchAll();
 	}
 	public function get_tags($user_id) {
-		$sql = "SELECT tags.tag 
+		$sql = "SELECT tags.tag, tags.id
 				FROM `tags`
 				INNER JOIN `users_tags` ON tags.id = users_tags.tag_id
 				WHERE users_tags.user_id = :user_id";
 		$stmt = $this->container->db->prepare($sql);
 		$stmt->bindParam(':user_id', $user_id);
 		$stmt->execute();
-
-		return $stmt->fetchAll();
+		return $stmt->fetchAll(\PDO::FETCH_ASSOC);
 	}
 
 	public function save($tag, $user_id) {
@@ -84,8 +83,7 @@ class Tag {
 	}
 
 
-	public function del_tags($tag, $user_id) {
-		$tag_id = $this->getTagId(ltrim($tag, "#"));
+	public function del_tags($tag_id, $user_id) {
 		$sql = "DELETE  
 				FROM `users_tags` WHERE tag_id = '$tag_id' AND user_id = '$user_id'";
 		$stmt = $this->container->db->prepare($sql);

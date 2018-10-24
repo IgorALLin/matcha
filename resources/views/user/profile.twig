@@ -4,10 +4,10 @@
 
 <article class="profile_container">
 
-        <div id="profile_photo" class="profile_photo_container box">
+    <div id="profile_photo" class="profile_photo_container box">
                 <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
                     <div class="carousel-inner" role="listbox">
-                        {% if len > 1 %}
+                        {% if len != 0 %}
                             {% for key, photo in photos %}
                                 {% if key == 0 %}
                             <div class="carousel-item active animated fadeIn">
@@ -32,36 +32,31 @@
                         </a>
                         {% else %}
                             <div>no photos</div>
-                        {% endif %}       
-                       
-                
+                        {% endif %}
                 </div>
             </div>
         </div>
 
-
-
     <div id="profile" class="profile_form_container">
-        
-
-
         <form enctype="multipart/form-data" action="{{ path_for('user.profile') }}" method="post" autocomplete="off">
             <div class="form_section">
                 <div class="field">
                     <label class="label">First Name:</label>
                     <div class="control">
+                          <label class="small_font">First name must contain only latinic letters or digits</label>
                         <p class="control has-icons-left">    
-                            <span class="control">  
-                                <input class="input is-info" name="firstName" type="text" value="{{ auth.user.firstName }}">
+                            <span class="control"> 
+                                <input class="input is-info" name="firstName" minlength="2" required="required" pattern="[a-zA-Z0-9]+" type="text" value="{{ auth.user.firstName }}">
                              </span>
                              <span class="icon is-small is-left"><i class="fas fa-address-card"></i></span>
                          </p>   
                     </div>
                     <label class="label">Last Name:</label>
                     <div class="control">
+                      <label class="small_font">Last name must contain only latinic letters or digits</label>  
                          <p class="control has-icons-left">    
-                            <span class="control">  
-                                <input class="input is-info" name="lastName" type="text" value="{{ auth.user.lastName }}">
+                            <span class="control"> 
+                                <input class="input is-info" name="lastName" minlength="2" required="required" pattern="[a-zA-Z0-9]+" type="text" value="{{ auth.user.lastName }}">
                             </span>
                               <span class="icon is-small is-left"><i class="fas fa-address-card"></i></span>
                          </p>       
@@ -116,7 +111,7 @@
                     <div class="control">
                           <p class="control has-icons-left">    
                             <span class="control">  
-                                <input  class="input is-info" name="email" type="email" value="{{ auth.user.email }}">
+                                <input  class="input is-info" name="email" type="email" required="required" value="{{ auth.user.email }}">
                             </span>
                              <span class="icon is-small is-left"><i class="fas fa-envelope"></i></span>
                           </p>      
@@ -125,7 +120,7 @@
                     <div class="control">
                           <p class="control has-icons-left">    
                             <span class="control">  
-                                 <input class="input is-info" type="date" class="input" name="dateOfBirth" value="{{ profile.dateOfBirth }}">
+                                 <input class="input is-info" type="date" required="required" max="2000-01-01" min="1900-01-02" name="dateOfBirth" value="{{ profile.dateOfBirth }}">
                             </span>
                               <span class="icon is-small is-left"><i class="fas fa-calendar"></i></span>
                           </p>       
@@ -147,7 +142,7 @@
 
             <div class="bioghraphy">
                 <label class="label">About me:</label>
-                <textarea class="textarea is-info" rows="5"  id="biography" name="biography"></textarea>
+                <textarea class="textarea is-info" rows="5" id="biography" name="biography">{{ biography }}</textarea>
             </div>
             <div class="field">
               <label class="label">Add tags:</label>
@@ -161,7 +156,7 @@
                    <input class="form-control" type="text" name="tags" id="tag">
                 <ul></ul>
             </div>
-            <button class="button is-info"  id="addTag">Add tag</button>
+            <button class="button is-info" id="addTag">Add tag</button>
              <div id="show_tags">
                </div> 
             </div>
@@ -183,9 +178,9 @@
                 </span>
               </label>
             </div>
-             <div id="preview"></div>
+            <div id="preview"></div>
         </div>
-            <input class="btn button is-primary btn-block" value="Submit" type="submit">
+        <input class="btn button is-primary btn-block" value="Submit" type="submit" id="profile_button">
         </form>
     </div>
 </article>

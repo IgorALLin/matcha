@@ -9,13 +9,28 @@ class NotificationController extends Controller{
 		return $this->view->render($response, 'user/notofications.twig', ['notifications' => $this->notification->getNotifications($_SESSION['user'])->fetchAll()]);
 	}
 
+
+
+
+	public function postNotifications($request, $response)
+	{
+		$params = $request->getParsedBody();
+    	if(isset($params['method']) && $params['method'] == "load")
+    	{
+		$notes = $this->notification->getNotifications($_SESSION['user'])->fetchAll();
+		}	
+		return $response->withJson($notes);
+	}
+
+	
+
 	public function viewed($request, $response){
 		$param = $request->getParsedBody();
 		$id = $param['id'];
 
 		$this->notification->viewed($id);
-		
 		return $response->withJson($id);
+
 	}
 
 	public function delete($request, $response){

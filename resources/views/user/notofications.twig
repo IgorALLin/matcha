@@ -2,21 +2,33 @@
 
 {% block content %}
 
-<div id="notification">
+<div id="toTop">^ back to top</div>
+{% if notifications %}
+    <div class="delete_not_button"><button  class="button is-info" id="delete_all_notifications">Delete all</button></div>
+ {% endif %}   
+<!--<div id="notification" class="notifications_container">
   {% if notifications %}
-    <p id="delete_all_notifications">Delete all</p>
+    <div class="delete_not_button"><button  class="button is-info" id="delete_all_notifications">Delete a bunch</button></div>
     {% for key,value in notifications %}
-      <p data-id="{{value['id']}}">
+      <div class="box each_notification" data-id="{{value['id']}}">
         {% if value['viewed'] %}
-          <span class="viewed">
+          <div class="viewed">
         {% else %}
-          <span class="not_viewed">
+          <div class="not_viewed"><button class="button is-light is-small viewed_button">Mark as viewed</button>
         {% endif %}
-        Mark as viewed</span> <a href="{{ base_url() }}/show?profile={{value['uid']}}">{{value['firstName']}} {{value['lastName']}} </a>{{value['text']}} {{value['time']}} 
-        <span class="delete_notification">Delete</span>
-      </p>
+        </div> <div><a href="{{ base_url() }}/show?profile={{value['uid']}}">{{value['firstName']}} {{value['lastName']}} </a>
+        </div><div>{{value['text']}} </div><div>{{value['time']}}</div> 
+        <button class="delete_notification delete is-medium">Delete</button>
+      </div>
     {% endfor %}
   {% endif %}
-</div>
+</div>-->
+<div id="notification" class="notifications_container"></div>
+
+{% endblock %}
+{% block javascript %}
+    {{ parent() }}
+
+    <script src="{{base_url()}}/public/js/notifications.js"></script>
 
 {% endblock %}

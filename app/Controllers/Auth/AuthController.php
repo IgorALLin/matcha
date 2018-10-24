@@ -14,6 +14,9 @@ class AuthController extends Controller{
 	public function getSignIn($request, $response){
 		return $this->view->render($response, 'auth/signin.twig');
 	}
+	public function reinit($request, $response){
+		return $this->view->render($response, 'auth/reinit.twig');
+	}
 
 	public function postSignIn($request, $response){
 		$auth = $this->auth->attempt(
@@ -73,11 +76,17 @@ class AuthController extends Controller{
 			$this->flash->addMessage('info', 'You have entered a wrong data');	
 			return $response->withRedirect($this->router->pathFor('auth.reinit'));
 		}
+		
+
+		
 	}
 
 	public function isAuth($request, $response) {
-		return $response->withJson($this->container->auth->check());
+		//return $response->withJson($this->container->auth->check());
+		if($this->container->auth->check() && $this->container->auth->is_filled())
+			return $response->withJson(true);
+		
+		return $response->withJson(false);
 	}
 }
-
 ?>

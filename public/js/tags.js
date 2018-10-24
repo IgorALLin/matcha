@@ -1,50 +1,6 @@
 var getUrl = window.location;
 var baseUrl = getUrl.protocol + "//" + getUrl.host + "/" + getUrl.pathname.split('/')[1];
 
-$(document).ready(function() {
-    $.ajax({
-	  	url: baseUrl + '/public/user/get_tags',
-	  	type: 'POST',
-	  	success: function(result){
-	  		result = JSON.parse(result);
-	  		$(result).each(function(){
-                $("#show_tags ul").append('<li>' + '#' + this.tag + '</li>');
-            })
-    		//console.log(result);
-  		}
-	});
-});
-
-
-
-/*$("#addTag").click(function(){
- 	var tag = $("#tag").val();
- 	$("#tag").val('');
-
-	if(tag){
-		var exist = false;
-		$("#show_tags ul li").each(function(){
-			if($(this).text() == '#' + tag) {
-				$(this).css('color', 'red');
-				exist = true;
-			}
-		});
-
-		if (!exist){
-  			$("#show_tags ul").append('<li>' + '#' + tag + '</li>');
-			$.ajax({
-			  	url: baseUrl + '/public/user/save_tag',
-			  	type: 'POST',
-			  	data: {
-			  		tag: tag,
-			  	},
-			  	success: function(result){
-		    		//console.log(result);
-		  		}
-			});
-		}
-  	}	
-});*/
 
 window.onload = function()
 {
@@ -68,8 +24,9 @@ if(addTag)
           {   
             if (xhrAdd_tag.readyState == 4)
             {
-            	 document.getElementById('show_tags').innerHTML = xhrAdd_tag.responseText;
-              console.log(tag_value);
+            	var res = xhrAdd_tag.responseText;
+            	 //document.getElementById('show_tags').innerHTML = xhrAdd_tag.responseText;
+              //console.log(tag_value);
               document.getElementById('tags_box').innerHTML = "";
               showTags();
             }
@@ -92,8 +49,7 @@ if(tags_box)
 	            {
 	            	var tags = JSON.parse(xhrShow_tag.responseText);
 	            	 var len = Object.keys(tags).length;
-	            	console.log(tags);
-	            	// document.getElementById('tags_box').innerHTML = xhrShow_tag.responseText;
+
 	            	 for (var i = 0; i < len; i++)
 	                 {
 	                 	var tags_container = document.getElementById('tags_box');
@@ -101,9 +57,9 @@ if(tags_box)
 	                    var each_tag_button = document.createElement('button');
 	                   	each_tag.setAttribute("class", "tag profile_tag");
 	                    each_tag_button.setAttribute("class", "tag_button delete is-small");
-	                    each_tag_button.setAttribute("name", tags[i]);
+	                    each_tag_button.setAttribute("name", tags[i].id);
 	                    each_tag_button.setAttribute("onclick", "deleteTag()");
-	                    each_tag.innerHTML = tags[i];
+	                    each_tag.innerHTML = tags[i].tag;
 	                    tags_container.append(each_tag);
 	                     tags_container.append(each_tag_button);
 	                    
@@ -134,8 +90,6 @@ function deleteTag()
           {   
             if (xhrdel_tag.readyState == 4)
             {
-
-            	document.getElementById('tags_box').innerHTML = xhrdel_tag.responseText;
             	document.getElementById('tags_box').innerHTML = "";
               	showTags();
           	}

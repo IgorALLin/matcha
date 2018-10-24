@@ -15,22 +15,6 @@ html, body {
   height: 100%;
 
 }
-/*.wrapper:after
-{
-  content: "";
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
-  z-index: -1;
-  position: absolute;
-  background-image: url('../img/fag.jpeg');
-  background-size: cover;
-  filter: blur(5px);
-   background-attachment: scroll;
-
-  border: 1px solid cyan;
-}*/
 .main_container {
   width: 80%; 
   flex: 1 0 auto;
@@ -58,6 +42,7 @@ ul
 .common_header
 {
   width: 100%;
+
 }
 
 .navbar
@@ -568,9 +553,214 @@ margin-top: 10px;
   width: 70px;
 }
 
+.notifications_container
+{
+  width: 70%;
+  padding: 15px;
+  display: flex;
+  margin-bottom: 4%;
+  flex-direction: column;
+  background-color: rgba(214, 234, 248, 0.5);
+}
+.delete_not_button
+{
+  margin-bottom: 3%;
+}
+.each_notification
+{
+  display: flex;
+}
+.each_notification div
+{
+  margin-left: 2%;
+}
+.delete_notification
+{
+  margin-left: 2%;
+}
+.browsing_history
+{
+   width: 70%;
+  padding: 15px;
+  display: flex;
+  margin-bottom: 4%;
+  flex-direction: column;
+  background-color: rgba(214, 234, 248, 0.5);
+}
+.button_history
+{
+  margin-bottom: 3%;
+}
+.chat_list_container
+{
+  width: 50%;
+  padding: 15px;
+  display: flex;
+  margin-bottom: 4%;
+  flex-direction: column;
+  background-color: rgba(214, 234, 248, 0.5);
+}
+.chat_list
+{
+  display: flex;
+  width: 100%;
+}
+.chat_list div
+{
+  margin-left: 2%;
+}
+.chat_list_profile_link img
+{
+  width: 100px;
+}
+.chat_container
+{
+  width: 70%;
+  padding: 15px;
+  display: flex;
+  margin-bottom: 4%;
+  flex-direction: column;
+  background-color: rgba(214, 234, 248, 0.5);
+}
+
+#messages
+{
+  display: none;
+}
+.crutch
+{
+  visibility: hidden;
+}
+.chat_resp
+{ 
+  height: 600px;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+.left_mess
+{
+  width: 45%;
+  padding: 5px;
+  align-self: flex-start;
+  background-color:   #F0F8FF;
+  border-radius: 10px;
+  margin-top: 1%;
+  margin-bottom: 5px;
+
+}
+.right_mess
+{
+  width: 45%;
+  padding: 5px;
+  align-self: flex-end;
+  background-color: white;
+    border-radius: 10px;
+  margin-top: 1%;
+    margin-bottom: 5px;
+
+}
 
 
 
+.text_form
+{
+  margin-top: 2%;
+
+}
+
+.mess_wrap
+{
+  overflow-x: auto; 
+}
+.show_all_chats
+{
+  margin-bottom: 2%;
+}
+.send_message
+{
+  margin-top: 1%;
+}
+.mess_time
+{
+  font-size: 10px;
+  float: right;
+}
+
+.chat_photo_container
+{
+  width: 70px;
+  border-radius: 5px;
+  transform: translateY(-12px);
+}
+.chat_photo_container img
+{
+  border-radius: 5px;
+}
+
+
+.history_block
+{
+  display: flex;
+}
+
+.history_block div, 
+.history_block a
+{
+ margin-left: 2%;
+}
+
+
+
+#toTop 
+{
+  width:100px;
+  border:1px solid #ccc;
+  background:#f7f7f7;
+  border-radius: 5px;
+  text-align:center;
+  padding:5px;
+  position:fixed;
+  bottom:10px; 
+  right:10px;
+  cursor:pointer;
+  display:none;
+  color:#333;
+  font-family:verdana;
+  font-size:11px;
+  z-index: 1;
+}
+
+
+.small_font
+{
+  font-size: 11px;
+}
+
+.notifications_alarm
+{
+  display: flex;
+}
+.notifications_alarm_wrapper
+{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.error_text
+{
+   width: 70%;
+  padding: 15px;
+  display: flex;
+  margin-bottom: 4%;
+  flex-direction: column;
+  background-color: rgba(214, 234, 248, 0.5);
+}
+.basic_show
+{
+  margin-top: -25%;
+}
 
 
 @media screen and (max-width: 1400px)
@@ -617,7 +807,16 @@ margin-top: 10px;
   {
     margin-bottom: 5%;
   }
-  
+  .notifications_container
+  {
+    width: 50%;
+  }
+  .each_notification
+  {
+    display: flex;
+    flex-direction: column;
+  } 
+
   
 }
 @media screen and (max-width: 900px)
@@ -672,7 +871,27 @@ margin-top: 10px;
     display:  flex;
   justify-content: center;
   }
-  
+  .chat_list_container
+   {
+    width: 100%;
+   }
+     .chat_list_container
+   {
+    width: 90%;
+   }
+   
+   .left_mess
+   {
+    width: 70%;
+   }
+   .right_mess
+   {
+    width: 70%;
+   }
+    .history_block
+  {
+    flex-direction: column;
+  }
   
   
 }
@@ -715,6 +934,26 @@ margin-top: 10px;
     display: flex;
     flex-direction: column;
   }
+    .chat_list
+  {
+    flex-direction: column;
+  }
+  .chat_list div
+  {
+    margin-top: 4%;
+  }
+   .chat_link
+   {
+    display: flex;
+   }
+   .chat_list_container
+   {
+    width: 70%;
+   }
+   .chat_container
+   {
+    width: 100%;
+   }
  
 
 
@@ -762,6 +1001,14 @@ margin-top: 10px;
   .tag
   {
     font-size: 8px !important;
+  }
+  .left_mess
+  {
+    font-size: 12px;
+  }
+   .right_mess
+  {
+    font-size: 12px;
   }
 
  

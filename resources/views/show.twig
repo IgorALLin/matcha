@@ -63,15 +63,16 @@
             {% endfor %}</div>
         </div>
         <a href="javascript:void(0)" id="like" data-type="{{like}}" class="button is-info">
-            {{like}}
-        </a>
+           {{like}}
+       </a>
         <button type="submit" class="button is-info" name="{{ id }}" id="block">block</button>
-        <div id="block_response"></div>    
+        <button type="submit" class="button is-info" data-id="{{ id }}" id="fake">Report as fake</button>
+        <div id="block_response"></div>
       </div>
     </div>
 </article>    
 {% endblock %}
-{% block javascript %}
+ {% block javascript %}
     {{ parent() }}
     <script src="{{base_url()}}/public/js/show.js"></script>
-{% endblock %}
+ {% endblock %}

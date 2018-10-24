@@ -16,8 +16,7 @@ class CreateConnection {
     public function chat_message($chanel_id, $data) {
     	$this->chanel = 'chat-'.$chanel_id;
     	$this->event = 'message';
-        $this->data = $data;
-        
+    	$this->data = $data;
 
     	$this->send_message();
     }
