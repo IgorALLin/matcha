@@ -126,7 +126,7 @@ class UserProfileController extends Controller{
 			$this->container->tag->del_tags($tag_id, $id);
 
 			$tags = $this->container->tag->get_tags($id);
-						var_dump($tags);
+					
 			$res = [];
 			$new = [];
 			foreach ($tags as $key => $value)
@@ -228,11 +228,9 @@ class UserProfileController extends Controller{
 		}
 		else
 		{
-
+			if(!$request->getParam('dateOfBirth') || ( $request->getParam('dateOfBirth')&& !preg_match("/^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/",$request->getParam('dateOfBirth'))))
+				return $response->withRedirect($this->router->pathFor('user.profile'));
 	 		$photos = $this->photos->get($request);
-	 		if($photos){
-				$this->userProfile->mark_profile_as_filled($_SESSION['user']);
-			}
 
 	 		$param = $request->getParsedBody();
 	 		$userData = array(
@@ -243,13 +241,16 @@ class UserProfileController extends Controller{
 	 		$this->userProfile->saveUserData($userData, $id);
 			$profile = array(
 				'photos' => $photos,
-				'gender' => $request->getParam('gender'),
-				'sexualPreferences' => $request->getParam('sexualPreferences'),
-				'biography' => $request->getParam('biography'),
-				'dateOfBirth' => $request->getParam('dateOfBirth'),
+				'gender' => htmlspecialchars($request->getParam('gender')),
+				'sexualPreferences' => htmlspecialchars($request->getParam('sexualPreferences')),
+				'biography' => htmlspecialchars($request->getParam('biography')),
+				'dateOfBirth' => htmlspecialchars($request->getParam('dateOfBirth')),
 				'mainPhoto' => explode(',', $photos)[0]
 			);
 			$this->userProfile->save($profile);
+			if($photos){
+				$this->userProfile->mark_profile_as_filled($_SESSION['user']);
+			}
 			return $response->withRedirect($this->router->pathFor('user.profile'));
 		}
 		

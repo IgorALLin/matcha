@@ -40,7 +40,6 @@ class ChatsController extends Controller{
 			{
 				$value['photo'] = $user_photo[0]['mainPhoto'];
 
-			
 			}
 
 			return $response->withJson($messages);
@@ -52,16 +51,15 @@ class ChatsController extends Controller{
 	public function get_chats($request, $response)
 	{
 		$chats = $this->chats->find_all_chats($_SESSION['user']);
-
 		if($chats)
 		{
+			
 			$chanels = array();
 			foreach($chats as $chat)
 			{
 				$chanel = $chat['chanel'];
 				$chanels[] = $chanel;
 			}
-
 			return $response->withJson($chanels);
 		}
 

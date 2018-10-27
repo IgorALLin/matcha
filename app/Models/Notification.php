@@ -65,9 +65,10 @@ Class Notification {
         $stmt->execute();
     }
 
-    public function delete_all(){
+    public function delete_all($id){
+
         $sql = "DELETE
-                FROM `notifications`";
+                FROM `notifications` WHERE `user_id` = '$id'";
         $stmt = $this->container->db->prepare($sql);
         $stmt->execute();
     }

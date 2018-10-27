@@ -40,6 +40,9 @@
     <div id="profile" class="profile_form_container">
         <form enctype="multipart/form-data" action="{{ path_for('user.profile') }}" method="post" autocomplete="off">
             <div class="form_section">
+              {% if auth.is_filled == false %}
+              <div class="field" style="color: red; font-size: 12px;">You can't use all features until you fill up profile</div>
+              {% endif %}
                 <div class="field">
                     <label class="label">First Name:</label>
                     <div class="control">

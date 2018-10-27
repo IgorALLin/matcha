@@ -84,12 +84,12 @@ class Search{
 					WHERE user_profile.sexualPreferences = '$prefer'
 					AND users.id <> '$id' " : 0;
 
-		$sql .="AND NOT EXISTS (SELECT * FROM blocked WHERE blocked_id = users.id AND blocker_id = '$id') AND user_profile.filled = 1";			
+		$sql .="AND NOT EXISTS (SELECT * FROM blocked WHERE blocked_id = users.id AND blocker_id = '$id') AND user_profile.filled = 1 ";			
 
 		($age != 0 ) ? $sql .="
 				AND TIMESTAMPDIFF(YEAR, user_profile.dateOfBirth, CURDATE()) = '$age'" : 0;
 
-		(!empty($filter['tags_select'])) ? $sql .="AND users.id IN (SELECT user_id FROM `users_tags` WHERE tag_id IN ($tags_str)) " : 0; 
+		(!empty($filter['tags_select'])) ? $sql .=" AND users.id IN (SELECT user_id FROM `users_tags` WHERE tag_id IN ($tags_str)) " : 0; 
 
 		($filter['age_gap'] != 0 && $age == 0) ? $sql .="
 				AND TIMESTAMPDIFF(YEAR, user_profile.dateOfBirth, CURDATE()) BETWEEN '$min_age' AND '$max_age'" : 0;		

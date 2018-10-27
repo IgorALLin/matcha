@@ -1,5 +1,5 @@
 //Connect to Pusher
-Pusher.logToConsole = true;
+Pusher.logToConsole = false;
 var pusher = new Pusher('fd0440e60019404539bf', {
 	cluster: 'eu',
 	forceTLS: true
@@ -14,7 +14,6 @@ $(document).ready(function() {
 		method: "GET",
 		success: function(data) 
 		{
-			console.log(data)
 			if(data){
 				//Get count of unreaded notifications and unreand chats messages and insert to the header
 				count_unread();
@@ -121,9 +120,6 @@ function connect_to_notifications_chanel(){
 	let channel = pusher.subscribe('notification-message-' + $user_id);
 
 	channel.bind('notification', function(data) {
-		let audio = new Audio('public/sounds/notification.mp3');
-		audio.play();
-
 		$("#notifications_count").text(Number($("#notifications_count").text()) + 1);
 
 		if(data.chanel){
@@ -142,9 +138,7 @@ function connect_to_chats_chanels(){
 		method: "GET",
 		success: function(data) 
 		{
-			console.log(data)
 			if(data){
-				
 				data.forEach(function(chat_id){
 					connect_to_chat_chanel(chat_id);
 				})
@@ -155,9 +149,7 @@ function connect_to_chats_chanels(){
 
 function connect_to_chat_chanel(chat_id){
 	let channel = pusher.subscribe('chat-' + chat_id);
-	console.log('connected to chanel: ' + chat_id)
 	channel.bind('message', function(data) {
-		console.log(data)
 		$('#messages').append('<p>' + data.message + '</p>');
 	});
 }

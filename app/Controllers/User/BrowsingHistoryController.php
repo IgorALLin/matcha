@@ -9,7 +9,8 @@ Class BrowsingHistoryController extends Controller{
     }
 
     public function delete($request, $response) {
-		$this->visits->clear_history();
+        $id = $_SESSION['user'];
+		$this->visits->clear_history($id);
 
 		exit();
     }

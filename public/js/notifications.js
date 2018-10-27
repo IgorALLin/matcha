@@ -1,48 +1,38 @@
-var getUrl = window.location;
-var baseUrl = getUrl.protocol + "//" + getUrl.host + "/" + getUrl.pathname.split('/')[1];
 
-var not_resp = document.getElementById('not_response');
-var perPage = 20;
+var perPage = 16;
 var i = 0;
-
+var $notifications = $('#notification').children();
 
 
 $(document).ready(function()
  {
+ 	add_ivents();
+	var win = $(window);
+	show_notifications();
 
-	 var win = $(window);
-
-
-	  win.scroll(function() {
-	    if ($(document).height() - win.height() == win.scrollTop())
+	//load more notifications
+	win.scroll(function() {
+		if ($(document).height() - win.height() == win.scrollTop())
 	    {
-	        i = perPage;
-	        perPage += 16;
-	        render(i, perPage);
+	    	load_new();
 
+	        
 	    } 
-	  });
-	    i = 0;
-         perPage = 20;
-        render(i, perPage);
+	});
+    
 
-         $(function() {
-
+    //button to top
+    $(function() {
        $(window).scroll(function()
         {
-
            if($(this).scrollTop() != 0)
             {
 
                 $('#toTop').fadeIn();
            
            } 
-           else
-            {
-
-                  $('#toTop').fadeOut();
-
-           }
+        	else
+				$('#toTop').fadeOut();
 
           });
            
@@ -53,9 +43,25 @@ $(document).ready(function()
            });
            
       });
-
-	   
 });	          
+
+function load_new(){
+    i = i + perPage;
+    show_notifications();
+}
+
+function show_notifications() {
+	for(let j = i; j < i + perPage; j++){
+		if($notifications.eq(j))
+			$notifications.eq(j).show();
+	}
+}
+
+function show_more(){
+	$showed = $('#notification > div:visible');
+	if($showed.length < 16)
+		load_new();
+}
 
 function add_ivents(){
     //mark notification as viewed
@@ -87,13 +93,14 @@ function add_ivents(){
 		if($(this).parent().find('span').eq(0).hasClass('not_viewed'))
 			$("#notifications_count").text($("#notifications_count").text() - 1);
 
+		show_more();
 		$.ajax({
 			url: 'user/notifications/delete',
 			method: "POST", 
 			data: data,
 			success: function(data) 
 			{
-				//console.log($("[data-id=" + data + "]"))
+			
 				$("[data-id=" + data + "]").toggle('slow');
 			}
 		});
@@ -121,7 +128,8 @@ function add_ivents(){
 
 function render(i, pageCount)
 {
-	var response = document.getElementById('notification');
+	
+	/*var response = document.getElementById('notification');
    var xhr_not = new XMLHttpRequest;
 	    var formdata = new FormData();
 	          formdata.append("method", "load");
@@ -129,12 +137,11 @@ function render(i, pageCount)
 	          xhr_not.send(formdata);
 	            xhr_not.onloadend = function()
 	            {
-	            	//not_resp.innerHTML = xhr_not.responseText;
-	              //document.getElementById('form_status').innerHTML = xhr_gal.responseText;
+	         
 	              if (xhr_not.readyState == 4)
 	                {
 	                 res = JSON.parse(xhr_not.responseText);
-	                 console.log(res);
+	          
 	                  var len = Object.keys(res).length;
 
 	                  if (perPage > len)
@@ -143,18 +150,6 @@ function render(i, pageCount)
 	                  }
 	                  if(i > 0)
 	                    i += 1;
-	       			/*if(len > 0)
-	                  		{
-	                  			var delete_button_wrap = document.createElement('div');
-	                  			var delete_button = document.createElement('button');
-	                  			delete_button_wrap.setAttribute("class", "delete_not_button");
-	                  			delete_button.setAttribute("class", "button is-info");
-	                  			delete_button.setAttribute("id", "delete_all_notifications");
-	                  			delete_button.innerHTML = "Delete a bunch";
-	                  			delete_button_wrap.append(delete_button);
-	                  			response.append(delete_button_wrap);
-	                  		}	
-*/
 	                  for (var j = i; j < perPage; j++)
 	                  {
 
@@ -163,7 +158,7 @@ function render(i, pageCount)
 	                		var block_status = document.createElement('div');
 	                		var link_wrapper = document.createElement('div');
 	                		var link = document.createElement('a');
-	                		link.setAttribute("href",  baseUrl + "/show?profile=" + res[j].id);
+	                		link.setAttribute("href",  baseUrl + "/show?profile=" + res[j].uid);
 	                		link.innerHTML = (res[j].firstName + " " + res[j].lastName);
 
 	                		block.setAttribute("class", "box each_notification");
@@ -200,5 +195,5 @@ function render(i, pageCount)
 	                  }
 	                  add_ivents();
 	                }
-	              }
+	              }*/
 }

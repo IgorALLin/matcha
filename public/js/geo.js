@@ -140,48 +140,6 @@ function enableSetAuto(){
       setTimeout(function(){document.getElementById("autoset_location").disabled = false;},4000);
   }
 
-// send coords which user has manually set.
-// Sending by using ajax requset and store coords values  in formdata. This coords must be saved into database
-/*if(document.getElementById('manset_location'))
-{
-
-
-  var manual_geo_data = new Vue({
-    el: '#manset_location',
-    methods:
-    {
-      savePosition: function(event)
-      {
-        console.log('fuck');
-        if(mark)
-        {
-          var xhr = new XMLHttpRequest;
-          var formdata = new FormData();
-          formdata.append("method", "position");
-          formdata.append("submethod", "manual");
-          formdata.append("posLat", mark.getPosition().lat());
-          formdata.append("posLong", mark.getPosition().lng());
-          xhr.open('POST', baseUrl + '/user/profile', true);
-          xhr.send(formdata);
-          xhr.onreadystatechange = function()
-          {   
-            if (xhr.readyState == 4)
-            {
-              document.getElementById('map_message').innerHTML = "Your location was updated manually";
-              document.getElementById('lat_lng').innerHTML = xhr.responseText;
-              infoWindow.setMap(null);
-            }
-          }
-        }
-        else
-        {
-          document.getElementById('map_message').innerHTML = "No marker has been added";
-        }
-      }
-    }
-
-  })
-}*/
 
 
 var manset_location = document.getElementById('manset_location');
@@ -191,7 +149,6 @@ if( manset_location )
   manset_location.onclick = function(e)
   {
      e.preventDefault();
-        console.log('fuck');
         if(mark)
         {
           var xhr = new XMLHttpRequest;

@@ -65,20 +65,20 @@ function render(i, pageCount)
 
             xhr_gal = new XMLHttpRequest;
             formdata = new FormData(document.forms.search_form);
-            formdata.append("method", "showGallery");
-            xhr_gal.open('POST', baseUrl + '/searchbasic', true);
+            formdata.append("method", "showGalleryBasic");
+            xhr_gal.open('POST', baseUrl + '/search', true);
             xhr_gal.send(formdata);
 
             xhr_gal.onloadend = function()
             {
 
-              //document.getElementById('form_status').innerHTML = xhr_gal.responseText;
+             
               if (xhr_gal.readyState == 4)
                 {
                  gallery_array = JSON.parse(xhr_gal.responseText);
                
 
-                 console.log(gallery_array);
+
                   if(gallery_array == "error")
                   {
                     alert("I don't even want to know what you entered to get this place, if you do this accidantelly, otherwise it means you trying to illegally sneak into system and do some bad things. In that case i wish you can't plug a flashdrive in roght position at first attempt till the end of your days... ");

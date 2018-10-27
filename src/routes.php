@@ -32,20 +32,18 @@ $app->group('', function() {
 $app->group('', function() use ($container) {
 	$this->get('/auth/signout', 'AuthController:getSignOut')->setName('auth.signout');
 	$this->get('/search', 'SearchController:search')->setName('search');
+	$this->post('/search', 'SearchController:filters');
 	$this->get('/user/profile', 'UserProfileController:getUserProfile')->setName('user.profile');
 	$this->post('/user/profile', 'UserProfileController:postUserProfile');
 	$this->get('/auth/password/change', 'PasswordController:getChangePassword')->setName('auth.password.change');
+	$this->post('/auth/password/change', 'PasswordController:postChangePassword');
 
 	$this->group('', function() use ($container) {
-		$this->post('/auth/password/change', 'PasswordController:postChangePassword');
-		
 		$this->get('/user/error', 'UserProfileController:error')->setName('user.error');
 		$this->get('/user/blacklist', 'UserProfileController:blacklist')->setName('user.blacklist');
 		$this->post('/user/blacklist', 'UserProfileController:blacklistPost');
 		$this->post('/user/report_as_fake', 'UserProfileController:fake');
 
-		$this->post('/search', 'SearchController:filters');
-		
 		$this->get('/show', 'ShowProfileController:show')->setName('showProfile');
 		$this->post('/show', 'ShowProfileController:postShow');
 														

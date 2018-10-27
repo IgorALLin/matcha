@@ -68,11 +68,11 @@ function render(i, pageCount)
 	            xhr_visit.onloadend = function()
 	            {
 	            	var res = JSON.parse(xhr_visit.responseText);
-	            	console.log(res);
+	            
 	              if (xhr_visit.readyState == 4)
 	                {
 	                 res = JSON.parse(xhr_visit.responseText);
-	                 console.log(res);
+	            
 	                  var len = Object.keys(res).length;
 
 	                  if (perPage > len)

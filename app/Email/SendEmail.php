@@ -46,7 +46,7 @@ class SendEmail {
 		$headers  = "Content-type: text/html; charset=windows-1251 \r\n"; 
 		$headers .= "From: ".self::$from."\r\n"; 
 		$headers .= "Reply-To: reply-to@example.com\r\n";
-		mail('somefellavs@gmail.com', $subject, $message, $headers);
+		mail($email, $subject, $message, $headers);
 	}
 }
 

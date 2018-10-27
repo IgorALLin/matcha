@@ -28,9 +28,6 @@ function getUrlParameter(sParam) {
 
 function get_arr()
 {
-	 	
-	console.log(i);
-	console.log(list);
 
   	 var xhr_chat = new XMLHttpRequest;
           var formdata = new FormData();
@@ -43,13 +40,10 @@ function get_arr()
             if(xhr_chat.readyState == 4)
             {
             	chat_resp.innerHTML = "";
-            	//document.getElementById('chat_response').innerHTML = xhr_chat.responseText;
+
 
             	var res = JSON.parse(xhr_chat.responseText);
-            	//res = res.replace(/&quot;/g, '\\"');
-            	//res = JSON.parse(res);
-            	 //res = JSON.parse(res);
-                
+
 
                  var len = Object.keys(res).length;
                   
@@ -64,10 +58,7 @@ function get_arr()
 					button.setAttribute("onclick", "show_all_shit()");
 					button.innerHTML = "Show all";
 					document.getElementById('chat_button').append(button);
-					//$(chat_resp).append(button);
-					//$(chat_resp).append(button);
-					//('#chat_resp').css("overflow-y", "scroll");
-					//limit = len - list;
+
 					limit = len - 42;
 				}
 				else if(len > 42)
@@ -78,15 +69,7 @@ function get_arr()
 				{
 					limit = 0;
 				}
-			    //if (list < len)
-			    //{
-				//	list = len;
-				//}
-				//if(i > 0)
-				//	i += 1;
-				//console.log(len);	
-				//console.log(limit);
-				console.log(res);
+			 
 
 				if(len)
 				{		
@@ -111,8 +94,7 @@ function get_arr()
 				        	photo_container.append(photo);
 							block.append(photo_container);
 				        }	
-						//var photo = document.createElement('div');
-						//photo.innerHTML = res[j].time;
+			
 							
 						mess_wrap.innerHTML = res[j].text;
 						time.innerHTML = res[j].time;
@@ -120,8 +102,7 @@ function get_arr()
 						block.append(mess_wrap);
 						block.append(time);
 						$(chat_resp).prepend(block);
-						//chat_resp.insertBefore(block);
-						//chat_resp.InsertBefore(photo);
+		
 				    }
 			    }
 			    chat_resp.scrollTop = chat_resp.scrollHeight - chat_resp.clientHeight           
@@ -129,15 +110,7 @@ function get_arr()
             }
           }  
 }
-/*$('#chat_response').on('scroll', function() {
-    
-        i = list;
-        list += 6;
-        get_arr(i, list);
 
-    } 
-
-  );*/
 
 $('#messages').on("DOMSubtreeModified",function()
 {	
@@ -148,9 +121,7 @@ $('#messages').on("DOMSubtreeModified",function()
 
 $(document).ready(function()
 {
-	//var  = $(window);
 
-	//list = 30;
     get_arr();
     chat_resp.scrollTop = chat_resp.scrollHeight - chat_resp.clientHeight;	
 
@@ -174,10 +145,8 @@ function show_all_shit()
 	            if(xhr_chat_1.readyState == 4)
 	            {
 	            	chat_resp.innerHTML = "";
-	            	var res = JSON.parse(xhr_chat.responseText);
-            	//res = res.replace(/&quot;/g, '\\"');
-            	//res = JSON.parse(res);
-            	 //res = JSON.parse(res);
+	            	var res = JSON.parse(xhr_chat_1.responseText);
+        
                 
 
                  var len = Object.keys(res).length;
@@ -206,8 +175,7 @@ function show_all_shit()
 				        	photo_container.append(photo);
 							block.append(photo_container);
 				        }	
-						//var photo = document.createElement('div');
-						//photo.innerHTML = res[j].time;
+					
 							
 						mess_wrap.innerHTML = res[j].text;
 						time.innerHTML = res[j].time;
@@ -215,8 +183,7 @@ function show_all_shit()
 						block.append(mess_wrap);
 						block.append(time);
 						$(chat_resp).prepend(block);
-						//chat_resp.insertBefore(block);
-						//chat_resp.InsertBefore(photo);
+		
 					    }
 				    }         
 								           

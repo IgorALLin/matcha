@@ -48,8 +48,8 @@ class Visits{
 		return $stmt;
 	}
 
-	public function clear_history() {
-		$sql = "DELETE FROM `visits`";
+	public function clear_history($id) {
+		$sql = "DELETE FROM `visits` WHERE visitor_id = '$id'";
 		$stmt = $this->db->prepare($sql);
 		$stmt->execute();
 	}

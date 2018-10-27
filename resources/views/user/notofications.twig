@@ -6,25 +6,28 @@
 {% if notifications %}
     <div class="delete_not_button"><button  class="button is-info" id="delete_all_notifications">Delete all</button></div>
  {% endif %}   
-<!--<div id="notification" class="notifications_container">
-  {% if notifications %}
-    <div class="delete_not_button"><button  class="button is-info" id="delete_all_notifications">Delete a bunch</button></div>
-    {% for key,value in notifications %}
-      <div class="box each_notification" data-id="{{value['id']}}">
-        {% if value['viewed'] %}
-          <div class="viewed">
-        {% else %}
-          <div class="not_viewed"><button class="button is-light is-small viewed_button">Mark as viewed</button>
-        {% endif %}
-        </div> <div><a href="{{ base_url() }}/show?profile={{value['uid']}}">{{value['firstName']}} {{value['lastName']}} </a>
-        </div><div>{{value['text']}} </div><div>{{value['time']}}</div> 
-        <button class="delete_notification delete is-medium">Delete</button>
-      </div>
-    {% endfor %}
-  {% endif %}
-</div>-->
-<div id="notification" class="notifications_container"></div>
 
+
+<div id="notification" class="notifications_container">
+	{% for notification in notifications %}
+		<div class="box each_notification" data-id="{{notification.id}}" style="display:none">
+			{% if notification.viewed %}
+				<div class="viewed"></div>
+			{% else %}
+				<div class="not-viewed">
+					<button class="button is-light is-small viewed_button">Mark as viewed</button>
+				</div>
+			{% endif %}	
+			<div>
+				<a href="{{base_url()}}/show?profile={{notification.uid}}">{{notification.firstName}} {{notification.lastName}}</a>
+			</div>
+			<div>{{notification.text}}</div>
+			<div>{{notification.time}}</div>
+			<button class="delete_notification delete is-medium">Delete</button>
+		</div>
+	{% endfor %}
+</div>
+	
 {% endblock %}
 {% block javascript %}
     {{ parent() }}

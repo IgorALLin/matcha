@@ -7,8 +7,9 @@ use App\Controllers\Controller;
 class SearchController extends Controller{
 	public function search($request, $response)
 	{
-		if(!$this->auth->is_filled())
+		if(!$this->auth->is_filled()){
 			return $this->view->render($response, 'search_basic.twig');
+		}
 
 		$age_max = $this->container->search->get_age_max();
 		$fame_max = $this->container->search->get_fame_max();
@@ -22,6 +23,9 @@ class SearchController extends Controller{
 		]);
 		
 	}
+
+
+
 
 	public function filters($request, $response) {
 		$id = $_SESSION['user'];
@@ -79,11 +83,15 @@ class SearchController extends Controller{
 			$filters = $request->getParsedBody();
 			return ;
 		}
+		if(isset($_POST['method']) && $_POST['method'] == "showGalleryBasic")
+		{
+			return $this->basic_getIntrestingProfiles();
+		}
 		if(isset($_POST['method']) && $_POST['method'] == "showGallery")
 		{
-				
 			$errors = 0;
 			$filters = $request->getParsedBody();
+		
 
 			if($filters['location_filter'] == "none" || $filters['location_filter'] == "City" || $filters['location_filter'] == "State" || $filters['location_filter'] == "Country")
 				;
@@ -109,19 +117,14 @@ class SearchController extends Controller{
 				;
 			else
 				$errors = 1;
-			if(preg_match('(^\d{1,3}\s{1}[-]{1}\s{1}\d{1,3}$)', $filters['age_gap']))
+			if($filters['age_gap'] == "none" || preg_match('(^\d{1,3}\s{1}[-]{1}\s{1}\d{1,3}$)', $filters['age_gap']))
 				;
 			else
 				$errors = 1;
-			if(preg_match('(^\d{1,9}\s{1}[-]{1}\s{1}\d{1,9}$)', $filters['fame_gap']))
+			if($filters['fame_gap'] == "none" || preg_match('(^\d{1,9}\s{1}[-]{1}\s{1}\d{1,9}$)', $filters['fame_gap']))
 				;
 			else
 				$errors = 1;
-			/*if(preg_match('(/\d+[\s]{1}[-]{1}[\s]{1}/\d+)', $filters['fame_gap']))
-				;
-			else
-				$errors = 1;
-			*/
 			if($errors == 1)
 			{
 				
@@ -153,7 +156,7 @@ class SearchController extends Controller{
 	public function getGeopluginData()
 	{
 				$res = [];
-				$ip_adress = $_SERVER['HTTP_CLIENT_IP'];  ///not sure about it, but remote_addr(seems like most reasonable) isn't working
+				$ip_adress = $_SERVER['HTTP_CLIENT_IP']; 
 				$str = 'http://www.geoplugin.net/php.gp?ip='.$ip_adress;
 				$data = unserialize(file_get_contents($str));
 				if(!empty($data['geoplugin_latitude']) && !empty($data['geoplugin_longitude']))
@@ -174,6 +177,16 @@ class SearchController extends Controller{
 				$res['city'] = $city;
 				$res['manual'] = 0;
 			return ($res);	
+	}
+
+	public function basic_getIntrestingProfiles()
+	 {
+	
+		$id = $_SESSION['user'];
+
+		$filtered = $this->container->BasicSearch->getFiltered($id);
+		return $filtered;
+
 	}
 
 	public function getIntrestingProfiles($id, $filters) {

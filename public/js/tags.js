@@ -25,8 +25,7 @@ if(addTag)
             if (xhrAdd_tag.readyState == 4)
             {
             	var res = xhrAdd_tag.responseText;
-            	 //document.getElementById('show_tags').innerHTML = xhrAdd_tag.responseText;
-              //console.log(tag_value);
+      
               document.getElementById('tags_box').innerHTML = "";
               showTags();
             }

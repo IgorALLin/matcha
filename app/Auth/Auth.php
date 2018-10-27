@@ -15,6 +15,7 @@ class Auth {
 	}
 
 	public function check(){
+
 		return isset($_SESSION['user']);
 	}
 

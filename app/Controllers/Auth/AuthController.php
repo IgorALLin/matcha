@@ -28,8 +28,8 @@ class AuthController extends Controller{
 			$this->flash->addMessage('error', 'Could not sign you in with those details.');
 			return $response->withRedirect($this->router->pathFor('auth.signin'));
 		}		
-		else			
-			return $response->withRedirect($this->router->pathFor('home'));
+		else
+			return $response->withRedirect($this->router->pathFor('home'));		
 	}
 
 	public function getSignUp($request, $response){
@@ -54,16 +54,16 @@ class AuthController extends Controller{
 	{
 
 		$params = $request->getParsedbody();
-		$name = htmlspecialchars(strip_tags($params['username']));
-		$mail = htmlspecialchars(strip_tags($params['email']));
-		$password = htmlspecialchars(strip_tags($params['newPassword']));
-
-		if(($name != "" || $mail != "" || $password != "") && (!preg_match('/^[a-z\d_]{2,20}$/i', $name) || (!filter_var($mail, FILTER_VALIDATE_EMAIL) || !preg_match('/^(?=.*\d)(?=.*[A-Za-z])[0-9A-Za-z!@#$%]{8,12}$/', $password))))
+		$name = htmlspecialchars($params['username']);
+		$mail = htmlspecialchars($params['email']);
+		$password = htmlspecialchars($params['newPassword']);
+		if(!preg_match('/^[a-zA-Z0-9]{1,20}$/', $name) || !preg_match('/^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=\S+$).{6,}$/', $password))
 		{
 			$this->flash->addMessage('info', "I don't even want to know, what did you enter to get this place");	
 			return $response->withRedirect($this->router->pathFor('auth.reinit'));
+		
 		}
-
+		
 		if($this->container->userProfile->checklogin_mail($name, $mail))
 		{
 			$this->sendEmail->reinit($name, $mail, $password);

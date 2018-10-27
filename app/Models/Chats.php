@@ -10,6 +10,7 @@ class Chats {
     }
 
     public function get_chats_list($uid) {
+
         $sql = "SELECT user_profile.mainPhoto,
                        user_profile.id,
                        (
@@ -28,12 +29,13 @@ class Chats {
                         WHEN chats.user_id = :uid THEN chats.user1_id
                         ELSE chats.user_id
                     END = user_profile.id
-                WHERE chats.active = 1    
+                WHERE chats.active = 1
+                    AND chats.user_id = :uid
+                    OR chats.user1_id = :uid
                 ORDER BY chats.last_message DESC"; 
         $stmt = $this->container->db->prepare($sql);
         $stmt->bindParam(':uid', $uid);
         $stmt->execute();
-
         return  $stmt->fetchAll(\PDO::FETCH_ASSOC);                   
     }
 
@@ -46,11 +48,11 @@ class Chats {
         $stmt->bindParam(':uid1', $uid1);
         $stmt->bindParam(':uid2', $uid2);
         $stmt->execute();
-
         return  $stmt->fetchColumn();  
     }
 
     public function enable($uid1, $uid2) {
+
         $sql = "UPDATE `chats`
                 SET `active` = 1
                 WHERE (`user_id` = :uid1 AND `user1_id` = :uid2)
@@ -84,6 +86,7 @@ class Chats {
     }
 
     public function find_all_chats($uid) {
+
         $sql = "SELECT `chanel`
                 FROM `chats`
                 WHERE `user_id` = :uid
@@ -92,7 +95,6 @@ class Chats {
         $stmt = $this->container->db->prepare($sql);
         $stmt->bindParam(':uid', $uid);
         $stmt->execute();
-
         return $stmt->fetchAll(\PDO::FETCH_ASSOC);
     }
 

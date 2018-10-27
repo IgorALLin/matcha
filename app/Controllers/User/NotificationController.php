@@ -36,11 +36,11 @@ class NotificationController extends Controller{
 	public function delete($request, $response){
 		$param = $request->getParsedBody();
 		$id = $param['id'];
-
+		$uid = $_SESSION['user'];
 		if($id !== 'all')
 			$this->notification->delete($id);
 		else
-			$this->notification->delete_all();
+			$this->notification->delete_all($uid);
 		return $response->withJson($id);
 	}
 
